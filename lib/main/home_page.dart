@@ -18,8 +18,8 @@ class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
   final screens = [
     const BerandaPage(),
-    const JadwalPage(),
     const QuizList(),
+    const JadwalPage(),
     const ListChatbot(),
   ];
 

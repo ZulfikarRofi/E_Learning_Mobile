@@ -1,4 +1,10 @@
+import 'dart:convert';
+
+import 'package:first_app/api/api.dart';
+import 'package:first_app/model/list_chatusers.dart';
+import 'package:first_app/model/user.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListChatbot extends StatefulWidget {
   const ListChatbot({Key? key}) : super(key: key);
@@ -8,8 +14,32 @@ class ListChatbot extends StatefulWidget {
 }
 
 class _ListChatbot extends State<ListChatbot> {
+  String? id = '';
+  String? name = '';
+
   @override
   Widget build(BuildContext context) {
+    getData() async {
+      @override
+      void initState() {
+        super.initState();
+        getData();
+      }
+
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+
+      if (localStorage.getString("id") != null) {
+        setState(() {
+          var sessUser = localStorage.getString("user");
+          var dat = jsonDecode(sessUser.toString());
+          User user = User.fromJson(dat[0]);
+          id = localStorage.getString("id")!;
+          name = user.name.toString();
+          print(id);
+        });
+      }
+    }
+
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -30,17 +60,41 @@ class _ListChatbot extends State<ListChatbot> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
-              MyChat(),
+              FutureBuilder<List<listChatUser>>(
+                  future: ApiService().listChat(id),
+                  builder:
+                      ((context, AsyncSnapshot<List<listChatUser>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // While the future is still running
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      // If an error occurred while fetching the data
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      // If no data is available or the data list is empty
+                      return Text('No data available');
+                    } else {
+                      // If data is available, you can build your UI using the data from the snapshot
+                      List<listChatUser> chats = snapshot.data!;
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          listChatUser data = chats[index];
+                          print(data);
+                          return MyChat(
+                            idChat: data.id.toString(),
+                            name: data.name,
+                            botName: data.bot_name,
+                            time: data.time,
+                            lastChat: data.last_chat,
+                            gap: data.gap.toString(),
+                          );
+                        },
+                        itemCount: chats.length,
+                      );
+                    }
+                  })),
               MyChat(),
             ],
           ),
@@ -49,6 +103,17 @@ class _ListChatbot extends State<ListChatbot> {
 }
 
 class MyChat extends StatelessWidget {
+  String? idChat, name, botName, time, lastChat, gap;
+  MyChat(
+      {Key,
+      key,
+      this.idChat,
+      this.name,
+      this.botName,
+      this.gap,
+      this.lastChat,
+      this.time})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -67,59 +132,62 @@ class MyChat extends StatelessWidget {
                 border: Border(
                     // top: BorderSide(color: Colors.grey, width: 1.0),
                     bottom: BorderSide(color: Colors.grey, width: 0.3))),
-            child: Stack(
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                        padding: const EdgeInsets.all(10),
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 70, 5, 1),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Image.asset('assets/images/murid.png')),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: Colors.black),
-                              'Chatbot Izu-Matematika'),
-                          Text(
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                  color: Colors.black),
-                              'Textttttttttttttttttttttttttttt')
-                        ],
-                      ),
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 70, 5, 1),
+                        borderRadius: BorderRadius.circular(25)),
+                    child: Image.asset('assets/images/murid.png')),
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  width: 200.0,
+                  height: 70.0,
+                  child: Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Colors.black),
+                            botName!),
+                        Text(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 14,
+                                color: Colors.black),
+                            lastChat!)
+                      ],
                     ),
-                    const Spacer(),
-                    const Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 11,
-                                      color: Colors.black),
-                                  'Last Seen'),
-                              Text(
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 11,
-                                      color: Colors.black),
-                                  '08:30')
-                            ]))
-                  ],
-                )
+                  ),
+                ),
+                const Spacer(),
+                Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Text(
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 11,
+                                  color: Colors.black),
+                              'Last Seen'),
+                          Text(
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 11,
+                                  color: Colors.black),
+                              // '08:30'
+                              time!)
+                        ]))
               ],
             ),
           ),

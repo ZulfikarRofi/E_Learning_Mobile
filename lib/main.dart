@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/detail_task': (context) => const DetailTask(),
         '/chatbot': (context) => const ChatbotPage(),
         '/list_chatbot': (context) => const ListChatbot(),
-        '/detail_kelas': (context) => const DetailKelas(),
+        // '/detail_kelas': (context) => const DetailKelas(idMapel: idMapel,),
         '/quiz_page': (context) => const Quiz(),
         '/quiz_fill': (context) => const QuizFill(),
         // '/quiz_result': (context) => QuizResult(),

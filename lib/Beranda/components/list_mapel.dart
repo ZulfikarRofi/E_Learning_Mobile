@@ -1,12 +1,14 @@
+import 'package:first_app/Siswa/detail_kelas.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class ListMapel extends StatelessWidget {
-  ValueNotifier<double> valueNotifier = ValueNotifier(75.0);
-  final String? namaMapel, namaGuru, totalMateri;
+  ValueNotifier<double> valueNotifier = ValueNotifier(00.0);
+  final String? idMapel, namaMapel, namaGuru, totalMateri;
   ListMapel({
     Key,
     key,
+    this.idMapel,
     this.namaMapel,
     this.namaGuru,
     this.totalMateri,
@@ -18,13 +20,19 @@ class ListMapel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/detail_mapel');
+          // Navigator.pushNamed(context, '/detail_kelas');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailKelas(idMapel: idMapel),
+            ),
+          );
         },
         style: ButtonStyle(
           overlayColor: MaterialStateProperty.all(Colors.transparent),
         ),
         child: SizedBox(
-          width: 240,
+          width: 250,
           height: 250,
           child: Container(
             decoration: BoxDecoration(
@@ -60,16 +68,21 @@ class ListMapel extends StatelessWidget {
                 Row(
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 12),
                       child: SizedBox(
-                          width: 150,
-                          child: Text(
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
-                              namaMapel!)),
+                        width: 200,
+                        child: Text(
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black),
+                            namaMapel!
+                            // 'Matematika',
+                            ),
+                      ),
                     ),
                   ],
                 ),
@@ -97,7 +110,12 @@ class ListMapel extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Column(
-                        children: [Image.asset('assets/images/gamerr.png')],
+                        children: [
+                          Image.asset(
+                            'assets/images/icon-male.png',
+                            scale: 5.0,
+                          )
+                        ],
                       ),
                       const Spacer(),
                       Container(
@@ -137,16 +155,25 @@ class ListMapel extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Padding(
+                          Container(
                             padding: const EdgeInsets.only(right: 8),
-                            child: Image.asset('assets/images/teacher.png'),
+                            child: Image.asset(
+                              'assets/images/guru.png',
+                              scale: 4.0,
+                            ),
                           ),
-                          const Text(
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Colors.grey),
-                              'Pak Marsono'),
+                          Container(
+                            width: 100.0,
+                            child: Text(
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12,
+                                    color: Colors.grey),
+                                // 'Pak Marsono'
+                                namaGuru!),
+                          ),
                         ],
                       ),
                       const Spacer(),
@@ -156,18 +183,21 @@ class ListMapel extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 8, right: 2),
                             child: Image.asset('assets/images/clipboard.png'),
                           ),
-                          const Text(
-                              style: TextStyle(
+                          Text(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12,
                                   color: Colors.grey),
-                              '20 Materi'),
+                              // '2 Materi'
+                              idMapel!),
                         ],
                       ),
                     ],
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(
+                  height: 25.0,
+                ),
                 SizedBox(
                   width: 300,
                   height: 5,

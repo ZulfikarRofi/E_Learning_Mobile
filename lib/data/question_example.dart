@@ -1,4 +1,4 @@
-import 'package:first_app/model/quiz_model.dart';
+import 'package:first_app/model/question_model.dart';
 
 List<QuestionModel> question = [
   QuestionModel(

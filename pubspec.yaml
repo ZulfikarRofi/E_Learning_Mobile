@@ -44,6 +44,7 @@ dependencies:
   confetti: ^0.7.0
   chat_bubbles: ^1.5.0
   simple_circular_progress_bar: ^1.0.2
+  flutter_html: ^3.0.0-beta.2
   
 
 
@@ -82,10 +83,13 @@ flutter:
     - assets/images/progress.png
     - assets/images/gamerr.png
     - assets/images/teacher.png
+    - assets/images/teacher-icon.png
     - assets/images/teacherr.png
+    - assets/images/guru.png
     - assets/images/clipboard.png
     - assets/images/question.png
     - assets/images/clock.png
+    - assets/images/icon-male.png
     - assets/images/hourglass.png
     - assets/images/bookstack.png
     - assets/images/trophy.png
@@ -96,6 +100,8 @@ flutter:
     - assets/images/silvermedal.png
     - assets/images/bronzemedal.png
     - assets/icons/vieww.png
+    - assets/images/man.png
+    - assets/images/woman.png
     # - assets/icons/clipboard.svg
     # - assets/icons/schedule.svg
     # - assets/icons/bubblechat.svg

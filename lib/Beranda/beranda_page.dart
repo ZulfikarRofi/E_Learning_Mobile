@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:first_app/Beranda/components/list_mapel.dart';
+import 'package:first_app/Mapel/detail_task.dart';
 import 'package:first_app/api/api.dart';
+import 'package:first_app/model/mata_pelajaran.dart';
+import 'package:first_app/model/tugas_model.dart';
 import 'package:first_app/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -151,51 +154,41 @@ class MyScrollableWidget extends StatelessWidget {
               )
             ],
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(children: <Widget>[
-                FutureBuilder(
-                  future: ApiService().getWhereData('/getMapelSiswa', id!),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                            "Something wrong with message: ${snapshot.error.toString()}"),
+          Container(
+            height: 300,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: FutureBuilder<List<MataPelajaran>>(
+              future: ApiService().getMataPelajaran(id!),
+              builder: (context, AsyncSnapshot<List<MataPelajaran>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // While the future is still running
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  // If an error occurred while fetching the data
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  // If no data is available or the data list is empty
+                  return Text('No data available');
+                } else {
+                  // If data is available, you can build your UI using the data from the snapshot
+                  List<MataPelajaran> mapel = snapshot.data!;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      MataPelajaran data = mapel[index];
+                      // print(data);
+                      return ListMapel(
+                        idMapel: data.id_mapel.toString(),
+                        namaMapel: data.nama_mapel,
+                        namaGuru: data.nama_guru,
+                        totalMateri: data.mapel_id,
                       );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      Map<String, dynamic> dat = jsonDecode(snapshot.data!);
-                      print(dat);
-                      if (dat['id'] == null) {
-                        return Container(
-                          padding: const EdgeInsets.all(20),
-                          child: const Text(
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                              'Tidak ada Mata Pelajaran yang diikuti'),
-                        );
-                      } else {
-                        return ListMapel(
-                          namaMapel: dat['nama_mapel'],
-                          // progress: dat['progress'],
-                          // daftarMurid: dat['daftar_murid'],
-                          namaGuru: dat['nama_guru'],
-                          totalMateri: dat['total_materi'],
-                        );
-                      }
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                )
-                // Add more horizontal items as needed
-              ]),
+                    },
+                    itemCount: mapel.length,
+                  );
+                }
+              },
             ),
           ),
           Padding(
@@ -222,62 +215,63 @@ class MyScrollableWidget extends StatelessWidget {
                         child: Column(
                           children: [
                             const Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                      width: 150,
-                                      child: Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16),
-                                          'Tugas Yang Belum Diselesaikan')),
-                                  Spacer(),
-                                  Padding(
-                                      padding: EdgeInsets.only(top: 20),
-                                      child: Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12),
-                                          'Lihat Semua..'))
-                                ]),
-                            FutureBuilder(
-                              future:
-                                  ApiService().getWhereData('/getTugasKu', id!),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasError) {
-                                  return Center(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                    width: 150,
                                     child: Text(
-                                        "Something wrong with message: ${snapshot.error.toString()}"),
-                                  );
-                                } else if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  Map<String, dynamic> dat =
-                                      jsonDecode(snapshot.data!);
-                                  print(dat);
-                                  if (dat['id'] == null) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(20),
-                                      child: const Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600),
-                                          'Tidak ada tugas yang belum dikerjakan'),
-                                    );
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16),
+                                        'Tugas Yang Belum Diselesaikan')),
+                                Spacer(),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: Text(
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 12),
+                                      'Lihat Semua..'),
+                                ),
+                              ],
+                            ),
+                            FutureBuilder<List<Task>>(
+                                future: ApiService().getTaskSiswa(id),
+                                builder: ((context,
+                                    AsyncSnapshot<List<Task>> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // While the future is still running
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    // If an error occurred while fetching the data
+                                    return Text('Error: ${snapshot.error}');
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    // If no data is available or the data list is empty
+                                    return Text('No data available');
                                   } else {
-                                    return listTugas(
-                                      namaTugas: dat['nama_tugas'],
-                                      namaKelas: dat['nama_kelas'],
-                                      namaMapel: dat['nama_mapel'],
-                                      tanggalAkhir: dat['due_date'],
+                                    // If data is available, you can build your UI using the data from the snapshot
+                                    List<Task> task = snapshot.data!;
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      itemBuilder: (context, index) {
+                                        Task data = task[index];
+                                        print(data);
+                                        return listTugas(
+                                          idTugas: data.id.toString(),
+                                          namaMapel: data.nama_mapel,
+                                          namaKelas: data.nama_kelas,
+                                          namaTugas: data.nama_tugas,
+                                          tanggalAkhir: data.due_date,
+                                        );
+                                      },
+                                      itemCount: task.length,
                                     );
                                   }
-                                } else if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              },
-                            ),
+                                }))
+                            //Listing Tugas Here
                           ],
                         ),
                       )
@@ -292,10 +286,11 @@ class MyScrollableWidget extends StatelessWidget {
 }
 
 class listTugas extends StatelessWidget {
-  final String? namaTugas, namaKelas, namaMapel, tanggalAkhir;
+  final String? idTugas, namaTugas, namaKelas, namaMapel, tanggalAkhir;
   const listTugas({
     Key,
     key,
+    this.idTugas,
     this.namaKelas,
     this.namaMapel,
     this.namaTugas,
@@ -309,7 +304,12 @@ class listTugas extends StatelessWidget {
         children: [
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/detail_task');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailTask(idTugas: idTugas),
+                ),
+              );
             },
             style: ButtonStyle(
               overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -326,32 +326,37 @@ class listTugas extends StatelessWidget {
                             color: const Color.fromRGBO(214, 228, 218, 1),
                             borderRadius: BorderRadius.circular(50)),
                         child: Image.asset('assets/images/pen.png'))),
-                const Padding(
-                  padding: EdgeInsets.only(left: 10),
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  width: 136,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.w900, color: Colors.black),
-                          'Menggambar Denah Rumah'),
+                          namaTugas!),
                       Text(
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Colors.black),
-                          'Kelas Seni Rupa')
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: Colors.black),
+                        namaMapel! + " " + "Kelas " + namaKelas!,
+                      )
                     ],
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15),
+                const SizedBox(
+                  width: 52.0,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 15),
                   child: Text(
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           color: Colors.black),
-                      'Kam, 20 Sep 23'),
+                      tanggalAkhir!),
                 )
               ],
             ),

@@ -1,16 +1,42 @@
 import 'dart:convert';
-
+import 'package:first_app/Kuis/quiz_page.dart';
 import 'package:first_app/api/api.dart';
+import 'package:first_app/model/quiz_model.dart';
+import 'package:first_app/model/user.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizList extends StatefulWidget {
   const QuizList({Key? key}) : super(key: key);
-  
+
   @override
   _QuizListState createState() => _QuizListState();
 }
 
 class _QuizListState extends State<QuizList> {
+  String id = '';
+  String? statusKuis = 'Belum Dikerjakan';
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    if (localStorage.getString("id") != null) {
+      setState(() {
+        var sessUser = localStorage.getString("user");
+        var dat = jsonDecode(sessUser.toString());
+        User user = User.fromJson(dat[0]);
+        id = localStorage.getString("id")!;
+        // name = user.name.toString();
+        print('quiz = ' + id);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +53,7 @@ class _QuizListState extends State<QuizList> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            child: AllQuiz(),
+            child: AllQuiz(id: id, statusKuis: statusKuis),
           )
         ]),
       )),
@@ -36,58 +62,77 @@ class _QuizListState extends State<QuizList> {
 }
 
 class AllQuiz extends StatelessWidget {
+  String? statusKuis;
+  final String? id;
+
+  AllQuiz({
+    Key? key,
+    this.id,
+    this.statusKuis,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Column(children: [
-        FutureBuilder(
-          future: ApiService().getWhereData('/get', id!),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                    "Something wrong with message: ${snapshot.error.toString()}"),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic> dat = jsonDecode(snapshot.data!);
-              print(dat);
-              if (dat['id'] == null) {
-                return Container(
-                  padding: const EdgeInsets.all(20),
-                  child: const Text(
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                      'Tidak ada tugas yang belum dikerjakan'),
-                );
-              } else {
+    return Column(children: [
+      FutureBuilder<List<QuizModel>>(
+        future: ApiService().getKuisSiswa(id!),
+        builder: (context, AsyncSnapshot<List<QuizModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While the future is still running
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurred while fetching the data
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // If no data is available or the data list is empty
+            return const Text('No data available');
+          } else {
+            // If data is available, you can build your UI using the data from the snapshot
+            List<QuizModel> kuis = snapshot.data!;
+            return ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                QuizModel data = kuis[index];
+
+                print(data);
+
                 return MyQuiz(
-                  namaKuis: dat['nama_tugas'],
-                  namaKelas: dat['nama_kelas'],
-                  namaMapel: dat['nama_mapel'],
-                  tanggalAkhir: dat['duedate'],
+                  idKuis: data.id_kuis.toString(),
+                  namaMapel: data.nama_mapel,
+                  namaKuis: data.nama_kuis,
+                  namaKelas: data.nama_kelas,
+                  tanggalAkhir: data.duedate,
+                  statusKuis: statusKuis,
                 );
-              }
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ),
-        //Looping
-      ]),
+              },
+              itemCount: kuis.length,
+            );
+          }
+        },
+      ),
+      //Looping
     ]);
   }
 }
 
 class MyQuiz extends StatelessWidget {
-  final String? namaKuis, namaKelas, namaMapel, tanggalAkhir;
+  final String? idKuis,
+      namaKuis,
+      namaKelas,
+      namaMapel,
+      tanggalAkhir,
+      statusKuis;
+
   const MyQuiz({
     Key,
     key,
+    this.idKuis,
     this.namaKuis,
     this.namaKelas,
     this.namaMapel,
     this.tanggalAkhir,
+    this.statusKuis,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -95,7 +140,12 @@ class MyQuiz extends StatelessWidget {
       padding: const EdgeInsets.only(),
       child: TextButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/quiz_page');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Quiz(idKuis: idKuis!),
+            ),
+          );
         },
         style: ButtonStyle(
           overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -146,41 +196,43 @@ class MyQuiz extends StatelessWidget {
                       child: Image.asset('assets/images/pen.png'),
                     ),
                   ),
-                  const Padding(
+                  Container(
                     padding: EdgeInsets.only(left: 5),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 fontSize: 14),
                             softWrap: false,
                             maxLines: 1,
-                            overflow: TextOverflow.fade,
-                            'Kuis 1 : Phytagoras'),
-                        SizedBox(
+                            overflow: TextOverflow.ellipsis,
+                            // 'Kuis 1 : Aljabar'
+                            namaKuis!),
+                        const SizedBox(
                           height: 2,
                         ),
                         Text(
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w300,
                                 color: Colors.white,
                                 fontSize: 12),
-                            'Matematika Kelas VII B')
+                            // 'Matematika Kelas IX-A'
+                            namaMapel! + " " + namaKelas!)
                       ],
                     ),
                   ),
-                  const Padding(
+                  Container(
                     padding: EdgeInsets.only(left: 35),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 fontSize: 10),
@@ -188,14 +240,17 @@ class MyQuiz extends StatelessWidget {
                             softWrap: false,
                             maxLines: 1,
                             overflow: TextOverflow.fade,
-                            'Kam, 18 Mei 2023'),
+                            // 'Kam, 18 Nov 2023'
+                            tanggalAkhir!),
                         Text(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                                fontSize: 10),
-                            textAlign: TextAlign.right,
-                            'Belum Dikerjakan')
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontSize: 10),
+                          textAlign: TextAlign.right,
+                          // 'Belum Dikerjakan',
+                          statusKuis!,
+                        )
                       ],
                     ),
                   )

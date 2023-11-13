@@ -37,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
 
     var res = await ApiService().postData(data, '/login');
     var body = jsonDecode(res.body);
-    print(body);
     if (body['respon']) {
       localStorage.setString('user', json.encode(body['user']));
 

@@ -136,7 +136,36 @@ class _QuizRankingPage extends State<QuizRanking> {
                           decoration: BoxDecoration(
                               color: Colors.lightBlue[200],
                               borderRadius: BorderRadius.circular(60)),
+                          child: Image.asset(
+                            'assets/images/icon-male.png',
+                            scale: 1.0,
+                          ),
                         )),
+                    Positioned(
+                        top: 330,
+                        left: 140,
+                        child: Container(
+                            width: 100.0,
+                            child: const Column(
+                              children: [
+                                Text(
+                                  'Budi',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  '70 pts',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w300),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ))),
                     //Crown
                     Positioned(
                         top: 160,
@@ -192,20 +221,20 @@ class _QuizRankingPage extends State<QuizRanking> {
                 ),
                 child: SingleChildScrollView(
                   child: Column(children: [
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
-                    MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
+                    // MyRankings(),
                   ]),
                 ),
               ),

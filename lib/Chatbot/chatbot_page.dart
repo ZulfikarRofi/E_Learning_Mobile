@@ -46,10 +46,7 @@ class _ChatbotPage extends State<ChatbotPage> {
                     ),
                     BotChat(),
                     PersonChat(),
-                    BotChat(),
-                    PersonChat(),
-                    BotChat(),
-                    PersonChat(),
+                    BotChatt(),
                   ],
                 ),
               ),
@@ -74,12 +71,6 @@ class _ChatbotPage extends State<ChatbotPage> {
                       children: [
                         MyOptionbot(),
                         MyOptionbott(),
-                        MyOptionbott(),
-                        MyOptionbotttt(),
-                        MyOptionbottt(),
-                        MyOptionbott(),
-                        MyOptionbot(),
-                        MyOptionbottt(),
                         MyOptionbott(),
                       ],
                     )),
@@ -106,7 +97,7 @@ class MyOptionbot extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                   fontSize: 14),
-              'Looooooooooooooooooooooooooooooooooong Text'),
+              'Bab 1. Apa pengertian aljabar dan bagaimana penerapannya dalam matematika ?'),
         ));
   }
 }
@@ -117,7 +108,8 @@ class PersonChat extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10, left: 20),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -143,8 +135,7 @@ class PersonChat extends StatelessWidget {
                 ],
               ),
               BubbleSpecialOne(
-                text:
-                    'Hai Namaku Izu, aku chatbot yang akan membantumu, mau tanya tentang apa hari ini ?',
+                text: 'Apa itu Matematika ?',
                 isSender: true,
                 tail: true,
                 color: Colors.black,
@@ -163,7 +154,7 @@ class PersonChat extends StatelessWidget {
                 border: Border.all(width: 1.0, color: Colors.white),
                 color: const Color.fromARGB(255, 160, 210, 233),
                 borderRadius: BorderRadius.circular(25)),
-            child: Image.asset('assets/images/murid.png'),
+            child: Image.asset('assets/images/icon-male.png'),
           ),
         ],
       ),
@@ -232,6 +223,67 @@ class BotChat extends StatelessWidget {
   }
 }
 
+class BotChatt extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            margin: const EdgeInsets.only(left: 10, right: 0),
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                border: Border.all(width: 1.0, color: Colors.grey),
+                color: const Color.fromARGB(255, 215, 215, 215),
+                borderRadius: BorderRadius.circular(25)),
+            child: Image.asset('assets/images/chatbot.png'),
+          ),
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 14),
+                        'Izu'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
+                            color: Colors.grey),
+                        '06.01 AM'),
+                  ),
+                ],
+              ),
+              BubbleSpecialOne(
+                text:
+                    'Matematika adalah ilmu yang berkaitan dengan angka, besaran, struktur, ruang, dan pola. Ini adalah disiplin ilmu yang mempelajari hubungan antara objek-objek matematis dan aturan-aturan yang mengatur mereka. Matematika memiliki peran penting dalam pemahaman dan memodelkan fenomena alam, ilmu pengetahuan, teknologi, ekonomi, dan berbagai bidang lainnya.',
+                isSender: false,
+                tail: true,
+                color: Color.fromARGB(255, 235, 235, 235),
+                textStyle: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class MyOptionbott extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -246,7 +298,7 @@ class MyOptionbott extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                   fontSize: 14),
-              'Looooooooooooooooooooooooooooooooooong Text'),
+              'Bab 1. Berikan contoh rumus aljabar !'),
         ));
   }
 }
@@ -265,7 +317,7 @@ class MyOptionbottt extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                   fontSize: 14),
-              'Looooooooooooooooooooooooooooooooooong Text'),
+              'Bab 1. Berikan saya rangkuman materi bab 1 tentang pengertian aljabar'),
         ));
   }
 }

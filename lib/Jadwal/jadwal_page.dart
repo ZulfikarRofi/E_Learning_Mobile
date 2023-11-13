@@ -1,4 +1,11 @@
+import 'dart:convert';
+
+import 'package:first_app/Mapel/detail_task.dart';
+import 'package:first_app/api/api.dart';
+import 'package:first_app/model/daily_task.dart';
+import 'package:first_app/model/user.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class JadwalPage extends StatefulWidget {
   const JadwalPage({Key? key}) : super(key: key);
@@ -8,38 +15,91 @@ class JadwalPage extends StatefulWidget {
 }
 
 class _JadwalPageState extends State<JadwalPage> {
+  int currentIndex = 0;
+  String name = '';
+  String id = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+
+    if (localStorage.getString("id") != null) {
+      setState(() {
+        var sessUser = localStorage.getString("user");
+        var dat = jsonDecode(sessUser.toString());
+        User user = User.fromJson(dat[0]);
+        id = localStorage.getString("id")!;
+        name = user.name.toString();
+        print('nomor = ' + id);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MyJadwalWidget(),
-    );
-  }
-}
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.only(top: 30),
+          child: Column(
+            children: [
+              const Row(
+                children: [
+                  Text(
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24,
+                      ),
+                      'Mata Pelajaran'),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 30),
+                child: MyDateWidget(),
+              ),
+              FutureBuilder<List<Dailytask>>(
+                future: ApiService().getDailytaskSiswa(id),
+                builder: (context, AsyncSnapshot<List<Dailytask>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // While the future is still running
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // If an error occurred while fetching the data
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // If no data is available or the data list is empty
+                    return const Text('No data available');
+                  } else {
+                    print(snapshot.data!);
+                    // If data is available, you can build your UI using the data from the snapshot
+                    List<Dailytask> dailytask = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        Dailytask data = dailytask[index];
 
-class MyJadwalWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.only(top: 30),
-        child: Column(
-          children: [
-            const Row(
-              children: [
-                Text(
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24,
-                    ),
-                    'Mata Pelajaran'),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: MyDateWidget(),
-            ),
-            MyTaskWidget(),
-          ],
+                        return AllTask(
+                          idTugas: data.id.toString(),
+                          namaMapel: data.nama_mapel,
+                          namaGuru: data.nama_guru,
+                          jamAwal: data.jam_masuk,
+                          jamAkhir: data.jam_akhir,
+                          namaTugas: data.nama_tugas,
+                        );
+                      },
+                      itemCount: dailytask.length,
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -151,7 +211,7 @@ class MyDateWidget extends StatelessWidget {
               ]),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 14),
+              margin: const EdgeInsets.symmetric(horizontal: 14),
               width: 120,
               height: 150,
               padding: const EdgeInsets.only(
@@ -227,36 +287,30 @@ class MyDateWidget extends StatelessWidget {
   }
 }
 
-class MyTaskWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return (Container(
-      margin: const EdgeInsets.symmetric(vertical: 30),
-      padding: const EdgeInsets.all(0),
-      child: Column(children: [
-        AllTask(),
-        AllTask(),
-        AllTask(),
-        AllTask(),
-        AllTask(),
-        AllTask(),
-        AllTask(),
-        AllTask(),
-        AllTask(),
-        AllTask(),
-      ]),
-    ));
-  }
-}
-
 class AllTask extends StatelessWidget {
+  final String? idTugas, namaGuru, namaMapel, jamAwal, jamAkhir, namaTugas;
+  const AllTask(
+      {Key,
+      key,
+      this.idTugas,
+      this.jamAwal,
+      this.jamAkhir,
+      this.namaMapel,
+      this.namaGuru,
+      this.namaTugas})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return TextButton(
       style: const ButtonStyle(
           overlayColor: MaterialStatePropertyAll(Colors.transparent)),
       onPressed: () {
-        Navigator.pushNamed(context, '/detail_task');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailTask(idTugas: idTugas),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(left: 8),
@@ -264,19 +318,23 @@ class AllTask extends StatelessWidget {
         height: 100,
         child: Row(
           children: [
-            const Padding(
+            Container(
               padding: EdgeInsets.only(right: 10),
               child: Column(
                 children: [
                   Text(
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, color: Colors.black),
-                      '07:30'),
-                  Spacer(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, color: Colors.black),
+                    jamAwal!,
+                    // '08:00'
+                  ),
+                  const Spacer(),
                   Text(
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.w500, color: Colors.black),
-                      '08:30')
+                      jamAkhir!
+                      // '10:30'
+                      )
                 ],
               ),
             ),
@@ -289,7 +347,7 @@ class AllTask extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: 12,
-                    height: 80,
+                    height: 100,
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: const BoxDecoration(
@@ -307,11 +365,13 @@ class AllTask extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                                style: TextStyle(
+                            Text(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black),
-                                'Task 1 : Tugas Matematika Pytagoras'),
+                                namaTugas!
+                                // 'Tugas 1: Tugas Matematika 1'
+                                ),
                             Padding(
                               padding: const EdgeInsets.only(left: 10, top: 10),
                               child: Row(
@@ -321,12 +381,14 @@ class AllTask extends StatelessWidget {
                                     child: Image.asset(
                                         'assets/images/teacherr.png'),
                                   ),
-                                  const Text(
-                                      style: TextStyle(
+                                  Text(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w300,
                                           fontSize: 10,
                                           color: Colors.black),
-                                      'Pak Subroto')
+                                      namaGuru!
+                                      // 'Bu Andriyani,S.Pd.'
+                                      )
                                 ],
                               ),
                             )

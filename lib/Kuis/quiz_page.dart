@@ -1,16 +1,44 @@
-import 'dart:async';
+import 'dart:convert';
 
+import 'package:first_app/Kuis/components/quizpage_background.dart';
 import 'package:first_app/Kuis/quiz_fill.dart';
+import 'package:first_app/api/api.dart';
 import 'package:flutter/material.dart';
 
 class Quiz extends StatefulWidget {
-  const Quiz({Key? key}) : super(key: key);
+  final String? idKuis;
+  const Quiz({Key? key, this.idKuis}) : super(key: key);
 
   @override
-  _QuizPage createState() => _QuizPage();
+  _QuizPage createState() => _QuizPage(idKuis: idKuis);
 }
 
 class _QuizPage extends State<Quiz> {
+  String? idKuis, namaKuis, duedate, namaKelas, namaMapel;
+  _QuizPage({this.idKuis});
+
+  @override
+  void initState() {
+    super.initState();
+    getDataKuis();
+  }
+
+  getDataKuis() async {
+    if (idKuis != null) {
+      final data = await ApiService().getWhereData('/getDetailKuis', idKuis!);
+      Map<String, dynamic> dataKuis = json.decode(data);
+      print(idKuis);
+      print(dataKuis);
+      setState(() {
+        namaKuis = dataKuis['data']['nama_kuis'];
+        namaMapel = dataKuis['data']['nama_mapel'];
+        namaKelas = dataKuis['data']['nama_kelas'];
+        // print(namaMapel);
+      });
+    }
+    // print(namaMapel);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,207 +68,125 @@ class _QuizPage extends State<Quiz> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                width: 400,
-                height: 400,
-                decoration: const BoxDecoration(
-                    color: Color.fromRGBO(38, 37, 37, 1),
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(40),
-                        bottomLeft: Radius.circular(40))),
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 0,
-                        left: 148,
-                        child: Container(
-                          width: 81,
-                          height: 81,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
-                              borderRadius: BorderRadius.circular(40.5)),
-                        )),
-                    Positioned(
-                        top: 80,
-                        left: -60,
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
-                              borderRadius: BorderRadius.circular(60)),
-                        )),
-                    Positioned(
-                        bottom: 70,
-                        left: 20,
-                        child: Container(
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
-                              borderRadius: BorderRadius.circular(23)),
-                        )),
-                    Positioned(
-                        top: 80,
-                        right: 60,
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
-                              borderRadius: BorderRadius.circular(20)),
-                        )),
-                    Positioned(
-                        bottom: 80,
-                        right: -60,
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
-                              borderRadius: BorderRadius.circular(60)),
-                        )),
-                    Positioned(
-                        top: 100,
-                        left: 75,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: 226,
-                              height: 226,
+              QuizpageBackground(),
+              FutureBuilder(
+                  future: getDataKuis(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              padding: EdgeInsets.all(10),
+                              width: 350,
                               decoration: BoxDecoration(
-                                  color: Color.fromRGBO(96, 92, 92, 1),
-                                  borderRadius: BorderRadius.circular(113)),
-                            ),
-                            Container(
-                              width: 175,
-                              height: 175,
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(143, 137, 137, 1),
-                                  borderRadius: BorderRadius.circular(88)),
-                            ),
-                            Container(
-                              width: 145,
-                              height: 145,
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(255, 255, 255, 1),
-                                  borderRadius: BorderRadius.circular(75)),
-                              child: TextButton(
-                                style: const ButtonStyle(
-                                    overlayColor: MaterialStatePropertyAll(
-                                        Colors.transparent)),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/quiz_fill');
-                                },
-                                child: const Text(
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 24,
-                                        color: Colors.black),
-                                    'MULAI'),
-                              ),
-                            )
-                          ],
-                        )),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      width: 350,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              blurRadius: 5,
-                              offset: const Offset(0, 5),
-                            )
-                          ]),
-                      child: Flexible(
-                        child: Column(
-                          children: [
-                            const Text(
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                                'Quiz 4 - Ilmu Pengetahuan Alam'),
-                            const Text(
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w300),
-                                'Topik : Zat dan  Perubahannya'),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 30, right: 30, left: 30),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Image.asset('assets/images/question.png'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14),
-                                          '20 Soal'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12),
-                                          'Total Soal')
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Column(
-                                    children: [
-                                      Image.asset(
-                                          'assets/images/hourglass.png'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14),
-                                          '30 Menit'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12),
-                                          'Waktu Pengerjaan')
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Column(
-                                    children: [
-                                      Image.asset('assets/images/clock.png'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14),
-                                          '07.00 - 12.00'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12),
-                                          'Jam Pengerjaan')
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
-              ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 5),
+                                    )
+                                  ]),
+                              child: Flexible(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600),
+                                        // 'Quiz 1 - Matematika'
+                                        "Kuis - " + namaMapel!),
+                                    Text(
+                                        style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w300),
+                                        // 'Topik : Aljabar',
+                                        namaKuis!),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 30, right: 30, left: 30),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Image.asset(
+                                                  'assets/images/question.png'),
+                                              const Text(
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 14),
+                                                  '10 Soal'),
+                                              const Text(
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize: 12),
+                                                  'Total Soal')
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                          Column(
+                                            children: [
+                                              Image.asset(
+                                                  'assets/images/hourglass.png'),
+                                              const Text(
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 14),
+                                                  '10 Menit'),
+                                              const Text(
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize: 12),
+                                                  'Waktu Pengerjaan')
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                          Column(
+                                            children: [
+                                              Image.asset(
+                                                  'assets/images/clock.png'),
+                                              const Text(
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 14),
+                                                  '07.00 - 15.00'),
+                                              const Text(
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize: 12),
+                                                  'Jam Pengerjaan')
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                        ],
+                      );
+                    } else {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                  }),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
