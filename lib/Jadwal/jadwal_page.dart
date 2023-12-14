@@ -33,9 +33,9 @@ class _JadwalPageState extends State<JadwalPage> {
         var sessUser = localStorage.getString("user");
         var dat = jsonDecode(sessUser.toString());
         User user = User.fromJson(dat[0]);
-        id = localStorage.getString("id")!;
+        id = user.siswa_id.toString();
         name = user.name.toString();
-        print('nomor = ' + id);
+        print('nomor = $id');
       });
     }
   }
@@ -73,9 +73,17 @@ class _JadwalPageState extends State<JadwalPage> {
                     return Text('Error: ${snapshot.error}');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     // If no data is available or the data list is empty
-                    return const Text('No data available');
+                    return Container(
+                      padding: const EdgeInsets.only(top: 200.0),
+                      child: const Text(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              color: Color.fromRGBO(0, 50, 105, 1),
+                              fontSize: 16),
+                          'Belum ada tugas hari ini!'),
+                    );
                   } else {
-                    print(snapshot.data!);
+                    // print(snapshot.data!);
                     // If data is available, you can build your UI using the data from the snapshot
                     List<Dailytask> dailytask = snapshot.data!;
                     return ListView.builder(

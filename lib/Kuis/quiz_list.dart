@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:first_app/Kuis/quiz_page.dart';
 import 'package:first_app/api/api.dart';
 import 'package:first_app/model/quiz_model.dart';
@@ -30,9 +31,9 @@ class _QuizListState extends State<QuizList> {
         var sessUser = localStorage.getString("user");
         var dat = jsonDecode(sessUser.toString());
         User user = User.fromJson(dat[0]);
-        id = localStorage.getString("id")!;
+        id = user.siswa_id.toString();
         // name = user.name.toString();
-        print('quiz = ' + id);
+        print(user);
       });
     }
   }
@@ -197,25 +198,28 @@ class MyQuiz extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    width: 120.0,
                     padding: EdgeInsets.only(left: 5),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 fontSize: 14),
                             softWrap: false,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                             // 'Kuis 1 : Aljabar'
                             namaKuis!),
                         const SizedBox(
                           height: 2,
                         ),
                         Text(
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w300,
                                 color: Colors.white,

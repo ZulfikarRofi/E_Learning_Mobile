@@ -14,12 +14,28 @@ class DetailTask extends StatefulWidget {
 
 class _DetailTaskPage extends State<DetailTask> {
   String? idTugas, namaTugas, namaMapel, namaKelas, namaGuru, tanggalAkhir;
+  bool isPressed = false;
   var deskripsiTugas = """""";
   _DetailTaskPage({this.idTugas});
 
   @override
   void initState() {
     super.initState();
+  }
+
+  _postDataTask() async {
+    var data = {
+      'siswa_id': "",
+      'task_id': "",
+    };
+
+    var res = await ApiService().postData(data, '/createTask');
+    var body = jsonDecode(res.body);
+    if (body['respons']) {
+      setState(() {
+        isPressed = !isPressed;
+      });
+    }
   }
 
   @override
@@ -47,9 +63,9 @@ class _DetailTaskPage extends State<DetailTask> {
           future: ApiService().getWhereData('/getDetailTugas', idTugas!),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.connectionState == ConnectionState.done) {
-              print(snapshot.data);
+              // print(snapshot.data);
               Map<String, dynamic> dataTugas = json.decode(snapshot.data!);
               namaTugas = dataTugas['data'][0]['nama_tugas'];
               namaMapel = dataTugas['data'][0]['nama_mapel'];
@@ -101,7 +117,7 @@ class _DetailTaskPage extends State<DetailTask> {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 16),
                                 // 'Matematika IX-A'
-                                namaMapel! + " " + namaKelas!)
+                                "${namaMapel!} ${namaKelas!}")
                           ],
                         ),
                       )
@@ -129,10 +145,18 @@ class _DetailTaskPage extends State<DetailTask> {
                     ),
                   ),
                   TaskCompletionWidget(
-                      namaGuru: namaGuru,
-                      namaKelas: namaKelas,
-                      namaMapel: namaMapel,
-                      tanggalAkhir: tanggalAkhir),
+                    key: UniqueKey(),
+                    isPressed: false,
+                    namaGuru: namaGuru,
+                    namaKelas: namaKelas,
+                    namaMapel: namaMapel,
+                    tanggalAkhir: tanggalAkhir,
+                    togglePressed: () {
+                      setState(() {
+                        isPressed = !isPressed;
+                      });
+                    },
+                  ),
                 ]),
               );
             } else {
@@ -143,11 +167,16 @@ class _DetailTaskPage extends State<DetailTask> {
   }
 }
 
+// ignore: must_be_immutable
 class TaskCompletionWidget extends StatelessWidget {
   String? namaGuru, namaKelas, namaMapel, tanggalAkhir;
+  bool isPressed;
+  final Function() togglePressed;
   TaskCompletionWidget(
       {Key,
       key,
+      required this.isPressed,
+      required this.togglePressed,
       this.namaGuru,
       this.namaKelas,
       this.namaMapel,
@@ -155,104 +184,106 @@ class TaskCompletionWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(children: [
-        Row(
-          children: [
-            Container(
-                // margin: const EdgeInsets.only(top: 10),
-                width: 344,
-                decoration: const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(color: Colors.grey, width: 1.0))),
-                padding: const EdgeInsets.only(top: 10, bottom: 5),
-                child: const Text(
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.grey),
-                    'Pengajar')),
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 165, 15, 4),
-                  borderRadius: BorderRadius.circular(35)),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Image.asset('assets/images/murid.png'),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 14),
-                      // 'Andriyani,S.Pd.'
-                      namaGuru!),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
-                      // 'Guru Matematika IX-A'
-                      "Guru " + namaMapel! + " " + namaKelas!),
-                ),
-              ],
-            )
-          ],
-        ),
-        const Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 10, left: 10),
-              child: Text(
+    return Column(children: [
+      Row(
+        children: [
+          Container(
+              // margin: const EdgeInsets.only(top: 10),
+              width: 344,
+              decoration: const BoxDecoration(
+                  border:
+                      Border(top: BorderSide(color: Colors.grey, width: 1.0))),
+              padding: const EdgeInsets.only(top: 10, bottom: 5),
+              child: const Text(
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontSize: 18,
                       color: Colors.grey),
-                  'Batas Pengerjaan'),
-            )
-          ],
-        ),
-        Row(
-          children: [
-            Padding(
+                  'Pengajar')),
+        ],
+      ),
+      Row(
+        children: [
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 165, 15, 4),
+                borderRadius: BorderRadius.circular(35)),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Image.asset('assets/images/murid.png'),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
                     style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 17,
-                        color: Colors.black),
-                    // 'Selasa, 17 November 2023'
-                    tanggalAkhir!)),
-          ],
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          width: 340,
-          height: 60,
-          decoration: BoxDecoration(
-              color: Colors.black, borderRadius: BorderRadius.circular(10)),
-          child: TextButton(
-            onPressed: () {},
-            child: const Text(
+                        fontWeight: FontWeight.w500, fontSize: 14),
+                    // 'Andriyani,S.Pd.'
+                    namaGuru!),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w400, fontSize: 12),
+                    // 'Guru Matematika IX-A'
+                    "Guru ${namaMapel!} ${namaKelas!}"),
+              ),
+            ],
+          )
+        ],
+      ),
+      const Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 10, left: 10),
+            child: Text(
                 style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                    color: Colors.white),
-                'Tugas Selesai'),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: Colors.grey),
+                'Batas Pengerjaan'),
+          )
+        ],
+      ),
+      Row(
+        children: [
+          Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                      color: Colors.black),
+                  // 'Selasa, 17 November 2023'
+                  tanggalAkhir!)),
+        ],
+      ),
+      Container(
+        margin: const EdgeInsets.only(top: 20),
+        width: 340,
+        height: 60,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        child: ElevatedButton(
+          onPressed: togglePressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isPressed ? Colors.amber : Colors.black,
+          ),
+          child: Text(
+            isPressed ? 'Tugas dikumpulkan' : 'Belum dikumpulkan',
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
+              color: Colors.white,
+            ),
           ),
         ),
-      ]),
-    );
+      ),
+    ]);
   }
 }

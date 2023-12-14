@@ -23,7 +23,7 @@ class _DetailKelasPage extends State<DetailKelas> {
   _DetailKelasPage({required this.id});
 
   String? namaMapel, deskripsi, namaGuru, namaKelas;
-  double? progress;
+  double progress = 0.0;
 
   @override
   void initState() {
@@ -77,15 +77,14 @@ class _DetailKelasPage extends State<DetailKelas> {
               future: ApiService().getWhereData('/getDetailMapel', id!),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   Map<String, dynamic> dataMapel = json.decode(snapshot.data!);
+                  progress = double.parse(dataMapel['data']['progress']);
                   namaMapel = dataMapel['data']['nama_mapel'];
                   deskripsi = dataMapel['data']['deskripsi'];
                   namaGuru = dataMapel['data']['nama_guru'];
                   namaKelas = dataMapel['data']['nama_kelas'];
-                  progress = dataMapel['data']['progress'];
-                  // print(progress);
 
                   return Column(
                     children: [
@@ -194,6 +193,7 @@ class _DetailKelasPage extends State<DetailKelas> {
                                                       fontWeight:
                                                           FontWeight.w300,
                                                       color: Colors.grey),
+                                                  // ignore: prefer_interpolation_to_compose_strings
                                                   'Guru ' +
                                                       namaMapel! +
                                                       " " +
@@ -227,7 +227,7 @@ class _DetailKelasPage extends State<DetailKelas> {
                                       Colors.lightGreen,
                                       Colors.lightBlue
                                     ],
-                                    valueNotifier: ValueNotifier(progress!),
+                                    valueNotifier: ValueNotifier(progress),
                                     mergeMode: true,
                                     onGetText: (double value) {
                                       return Text(

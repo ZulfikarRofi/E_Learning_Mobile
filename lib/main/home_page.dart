@@ -1,9 +1,9 @@
-import 'package:first_app/Beranda/components/app_bar_beranda.dart';
-import 'package:flutter/material.dart';
 import 'package:first_app/Beranda/beranda_page.dart';
+import 'package:first_app/Beranda/components/app_bar_beranda.dart';
 import 'package:first_app/Chatbot/list_chatbot.dart';
 import 'package:first_app/Jadwal/jadwal_page.dart';
 import 'package:first_app/Kuis/quiz_list.dart';
+import 'package:flutter/material.dart';
 
 // void main() => runApp(const BerandaPage());
 

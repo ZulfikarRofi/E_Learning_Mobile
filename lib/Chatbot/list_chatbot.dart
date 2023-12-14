@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:first_app/Chatbot/chatbot_page.dart';
 import 'package:first_app/api/api.dart';
 import 'package:first_app/model/list_chatusers.dart';
 import 'package:first_app/model/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListChatbot extends StatefulWidget {
@@ -16,30 +18,32 @@ class ListChatbot extends StatefulWidget {
 class _ListChatbot extends State<ListChatbot> {
   String? id = '';
   String? name = '';
+  String? idSiswa = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+
+    if (localStorage.getString("id") != null) {
+      setState(() {
+        var sessUser = localStorage.getString("user");
+        var dat = jsonDecode(sessUser.toString());
+        User user = User.fromJson(dat[0]);
+        id = localStorage.getString("id")!;
+        name = user.name.toString();
+        idSiswa = user.siswa_id.toString();
+        // print('idSiswa :' + idSiswa);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    getData() async {
-      @override
-      void initState() {
-        super.initState();
-        getData();
-      }
-
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-
-      if (localStorage.getString("id") != null) {
-        setState(() {
-          var sessUser = localStorage.getString("user");
-          var dat = jsonDecode(sessUser.toString());
-          User user = User.fromJson(dat[0]);
-          id = localStorage.getString("id")!;
-          name = user.name.toString();
-          print(id);
-        });
-      }
-    }
-
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -61,57 +65,61 @@ class _ListChatbot extends State<ListChatbot> {
           child: Column(
             children: [
               FutureBuilder<List<listChatUser>>(
-                  future: ApiService().listChat(id),
-                  builder:
-                      ((context, AsyncSnapshot<List<listChatUser>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // While the future is still running
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      // If an error occurred while fetching the data
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      // If no data is available or the data list is empty
-                      return Text('No data available');
-                    } else {
-                      // If data is available, you can build your UI using the data from the snapshot
-                      List<listChatUser> chats = snapshot.data!;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          listChatUser data = chats[index];
-                          print(data);
-                          return MyChat(
-                            idChat: data.id.toString(),
-                            name: data.name,
-                            botName: data.bot_name,
-                            time: data.time,
-                            lastChat: data.last_chat,
-                            gap: data.gap.toString(),
-                          );
-                        },
-                        itemCount: chats.length,
-                      );
-                    }
-                  })),
-              MyChat(),
+                future: ApiService().listChat(idSiswa),
+                builder:
+                    ((context, AsyncSnapshot<List<listChatUser>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // While the future is still running
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // If an error occurred while fetching the data
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // If no data is available or the data list is empty
+                    return const Text('No data available');
+                  } else {
+                    // If data is available, you can build your UI using the data from the snapshot
+                    List<listChatUser> chats = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        listChatUser data = chats[index];
+                        return MyChat(
+                          idChat: data.id.toString(),
+                          idBot: data.idBot.toString(),
+                          name: data.name,
+                          botName: data.bot_name,
+                          time: data.time,
+                          lastChat: Html(data: data.last_chat).toString(),
+                          gap: data.gap.toString(),
+                        );
+                      },
+                      itemCount: chats.length,
+                    );
+                  }
+                }),
+              ),
             ],
           ),
         ));
   }
 }
 
+// ignore: must_be_immutable
 class MyChat extends StatelessWidget {
-  String? idChat, name, botName, time, lastChat, gap;
+  String? idChat, name, botName, time, gap;
+  var lastChat = """""";
+  String idBot;
   MyChat(
       {Key,
       key,
       this.idChat,
+      required this.idBot,
       this.name,
       this.botName,
       this.gap,
-      this.lastChat,
+      required this.lastChat,
       this.time})
       : super(key: key);
   @override
@@ -120,7 +128,12 @@ class MyChat extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/chatbot');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatbotPage(idBot: idBot),
+              ),
+            );
           },
           style: ButtonStyle(
             overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -143,7 +156,7 @@ class MyChat extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25)),
                     child: Image.asset('assets/images/murid.png')),
                 Container(
-                  padding: EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 10),
                   width: 200.0,
                   height: 70.0,
                   child: Flexible(
@@ -156,21 +169,21 @@ class MyChat extends StatelessWidget {
                                 fontSize: 15,
                                 color: Colors.black),
                             botName!),
-                        Text(
+                        const Text(
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontWeight: FontWeight.w300,
                                 fontSize: 14,
-                                color: Colors.black),
-                            lastChat!)
+                                color: Color.fromRGBO(0, 0, 0, 1)),
+                            "")
                       ],
                     ),
                   ),
                 ),
                 const Spacer(),
                 Padding(
-                    padding: EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [

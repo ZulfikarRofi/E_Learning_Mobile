@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:first_app/api/api.dart';
 import 'package:first_app/model/user.dart';
 import 'package:flutter/material.dart';
@@ -47,12 +48,14 @@ class _LoginPageState extends State<LoginPage> {
       localStorage.setString('id', user.id_user.toString());
       // localStorage.setString('id', emailCont.text);
 
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushNamedAndRemoveUntil(
           '/homepage', (Route<dynamic> route) => false);
       EasyLoading.dismiss();
     } else {
       EasyLoading.dismiss();
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(body['msg'])));
     }
@@ -143,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 50,
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () {   
                 // Navigator.pushNamed(context, '/homepage');
                 _login();
               },

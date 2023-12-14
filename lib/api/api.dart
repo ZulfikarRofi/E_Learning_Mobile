@@ -1,25 +1,25 @@
 import 'dart:convert';
-import 'package:first_app/Chatbot/list_chatbot.dart';
-import 'package:first_app/Kuis/quiz_list.dart';
-import 'package:first_app/Kuis/quiz_page.dart';
+
+import 'package:first_app/data/question_example.dart';
 import 'package:first_app/model/daily_task.dart';
 import 'package:first_app/model/list_chatusers.dart';
 import 'package:first_app/model/mata_pelajaran.dart';
 import 'package:first_app/model/materi_mapel.dart';
 import 'package:first_app/model/quiz_model.dart';
-import 'package:first_app/model/selected_mapel.dart';
 import 'package:first_app/model/tugas_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  final String baseUrl = 'http://192.168.74.65:8000/api';
+  final String baseUrl = 'https://smp1ngetos-elearning.site/api';
 
+  // ignore: prefer_typing_uninitialized_variables
   var token;
 
   Client client = Client();
 
+  // ignore: unused_element
   _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     String? tokenNullable = localStorage.getString('token');
@@ -99,8 +99,19 @@ class ApiService {
     final response = await client.get(Uri.parse("$baseUrl/getMapelSiswa/$id"));
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
-      return mapelFromJson(json.encode(body['data']));
+      // Check if 'data' exists and is a list in the response
+      if (body['data'] is List) {
+        List<dynamic> dataList = body['data'];
+        // Map the list of 'data' to MataPelajaran objects using fromJson
+        List<MataPelajaran> mataPelajaranList =
+            dataList.map((data) => MataPelajaran.fromJson(data)).toList();
+        return mataPelajaranList;
+      } else {
+        // Return an empty list if 'data' is not a list or is empty
+        return List<MataPelajaran>.empty();
+      }
     } else {
+      // Handle other status codes (non-200)
       return List<MataPelajaran>.empty();
     }
   }
@@ -146,12 +157,24 @@ class ApiService {
   }
 
   Future<List<listChatUser>> listChat(id) async {
-    final response = await client.get(Uri.parse("$baseUrl/getChatUsers/$id"));
+    final response = await client.get(Uri.parse("$baseUrl/getListChatbot/$id"));
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
       return listChatUserFromJson(json.encode(body['data']));
     } else {
       return List<listChatUser>.empty();
+    }
+  }
+
+  Future<List<Quiz>> fetchQuizData(id) async {
+    final response = await http.get(Uri.parse("$baseUrl/getQuizQuestions/$id"));
+    if (response.statusCode == 200) {
+      final parsed = jsonDecode(response.body);
+      return List<Quiz>.from(
+        parsed['data'].map((quizData) => Quiz.fromJson(quizData)),
+      );
+    } else {
+      return List<Quiz>.empty();
     }
   }
 }

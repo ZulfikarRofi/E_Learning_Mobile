@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 class Task {
-  int? id;
-  int? mapel_id;
-  int? kelas_id;
+  String? id;
+  String? mapel_id;
+  String? kelas_id;
   String? nama_mapel;
   String? nama_kelas;
   String? nama_tugas;

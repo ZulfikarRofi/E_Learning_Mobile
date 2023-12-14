@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class materiMapel {
-  int? id;
+  String? id;
   String? modul_number;
   String? tanggal_regis;
   String? jam_regis;
-  int? kelas_id;
-  int? mapel_id;
-  int? guru_id;
+  String? kelas_id;
+  String? mapel_id;
+  String? guru_id;
   String? nama_mapel;
   String? nama_modul;
   String? nama_kelas;

@@ -45,10 +45,12 @@ dependencies:
   chat_bubbles: ^1.5.0
   simple_circular_progress_bar: ^1.0.2
   flutter_html: ^3.0.0-beta.2
+  # flutter_launcher_icons: ^0.13.1
   
 
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
 
@@ -63,6 +65,25 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/e-learning-high-resolution-logo-black-transparent.png"
+  icon_size: 48
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icons/e-learning-high-resolution-logo-black-transparent.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/icons/e-learning-high-resolution-logo-black-transparent.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icons/e-learning-high-resolution-logo-black-transparent.png"
 flutter:
 
   # The following line ensures that the Material Icons font is

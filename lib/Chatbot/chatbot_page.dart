@@ -1,83 +1,107 @@
+// ignore_for_file: no_logic_in_create_state
+
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:first_app/api/api.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ChatbotPage extends StatefulWidget {
-  const ChatbotPage({Key? key}) : super(key: key);
+  String idBot;
+  ChatbotPage({Key? key, required this.idBot}) : super(key: key);
 
   @override
-  _ChatbotPage createState() => _ChatbotPage();
+  // ignore: library_private_types_in_public_api
+  _ChatbotPage createState() => _ChatbotPage(idBot: idBot);
 }
 
 class _ChatbotPage extends State<ChatbotPage> {
+  String idBot;
+  _ChatbotPage({required this.idBot});
+  // ignore: unnecessary_new
   final now = new DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     // bool isKosong = false;
-
-    return Scaffold(
-        appBar: AppBar(
-            title: Row(
-          children: [
-            Image.asset('assets/images/chatbot.png'),
-            const Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
-                  'Chatbot Izu'),
-            )
-          ],
-        )),
-        body: Stack(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 120),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        DateChip(
-                          color: Colors.grey,
-                          date: new DateTime(now.year, now.month, now.day),
-                        ),
-                      ],
+    return FutureBuilder(
+        future: ApiService().getWhereData('/getBotData', idBot!),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return Scaffold(
+              appBar: AppBar(
+                  title: Row(
+                children: [
+                  Image.asset('assets/images/chatbot.png'),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 24),
+                        'Chatbot Izu'),
+                  )
+                ],
+              )),
+              body: Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 120),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              DateChip(
+                                color: Colors.grey,
+                                // ignore: unnecessary_new
+                                date:
+                                    new DateTime(now.year, now.month, now.day),
+                              ),
+                            ],
+                          ),
+                          BotChat(),
+                          PersonChat(),
+                          BotChatt(),
+                        ],
+                      ),
                     ),
-                    BotChat(),
-                    PersonChat(),
-                    BotChatt(),
-                  ],
-                ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      width: 385,
+                      height: 120,
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              top:
+                                  BorderSide(color: Colors.black, width: 1.0))),
+                      child: SingleChildScrollView(
+                          padding: const EdgeInsets.only(
+                              top: 10, bottom: 10, left: 10),
+                          scrollDirection: Axis.vertical,
+                          child: Wrap(
+                            spacing: 10.0,
+                            runSpacing: 10.0,
+                            direction: Axis.horizontal,
+                            children: [
+                              MyOptionbot(),
+                              // MyOptionbott(),
+                              // MyOptionbott(),
+                            ],
+                          )),
+                    ),
+                  )
+                ],
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                width: 385,
-                height: 120,
-                decoration: const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(color: Colors.black, width: 1.0))),
-                child: SingleChildScrollView(
-                    padding:
-                        const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                    scrollDirection: Axis.vertical,
-                    child: Wrap(
-                      spacing: 10.0,
-                      runSpacing: 10.0,
-                      direction: Axis.horizontal,
-                      children: [
-                        MyOptionbot(),
-                        MyOptionbott(),
-                        MyOptionbott(),
-                      ],
-                    )),
-              ),
-            )
-          ],
-        ));
+            );
+          } else {
+            return Text('Error: ${snapshot.error}');
+          }
+        });
   }
 }
 

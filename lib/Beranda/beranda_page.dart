@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:first_app/Beranda/components/list_mapel.dart';
 import 'package:first_app/Mapel/detail_task.dart';
 import 'package:first_app/api/api.dart';
@@ -20,6 +21,7 @@ class _BerandaPageState extends State<BerandaPage> {
   String _selectedItem = 'Item 1';
   String name = '';
   String id = '';
+  String idSiswa = '';
 
   @override
   void initState() {
@@ -37,7 +39,8 @@ class _BerandaPageState extends State<BerandaPage> {
         User user = User.fromJson(dat[0]);
         id = localStorage.getString("id")!;
         name = user.name.toString();
-        print('identitas = ' + id);
+        idSiswa = user.siswa_id.toString();
+        // print('idSiswa :' + idSiswa);
       });
     }
   }
@@ -119,17 +122,18 @@ class _BerandaPageState extends State<BerandaPage> {
           ],
         ),
       ),
-      body: MyScrollableWidget(id: id),
+      body: MyScrollableWidget(id: id, idSiswa: idSiswa),
     );
   }
 }
 
 class MyScrollableWidget extends StatelessWidget {
-  final String? id;
+  final String? id, idSiswa;
 
   const MyScrollableWidget({
     Key? key,
     this.id,
+    this.idSiswa,
   }) : super(key: key);
 
   @override
@@ -158,17 +162,17 @@ class MyScrollableWidget extends StatelessWidget {
             height: 300,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: FutureBuilder<List<MataPelajaran>>(
-              future: ApiService().getMataPelajaran(id!),
+              future: ApiService().getMataPelajaran(idSiswa!),
               builder: (context, AsyncSnapshot<List<MataPelajaran>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // While the future is still running
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   // If an error occurred while fetching the data
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   // If no data is available or the data list is empty
-                  return Text('No data available');
+                  return const Text('No data available');
                 } else {
                   // If data is available, you can build your UI using the data from the snapshot
                   List<MataPelajaran> mapel = snapshot.data!;
@@ -177,12 +181,14 @@ class MyScrollableWidget extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       MataPelajaran data = mapel[index];
-                      // print(data);
+                      // ignore: avoid_print
+                      print(data.progress);
                       return ListMapel(
-                        idMapel: data.id_mapel.toString(),
+                        idMapel: data.id.toString(),
                         namaMapel: data.nama_mapel,
+                        progress: double.parse(data.progress),
                         namaGuru: data.nama_guru,
-                        totalMateri: data.mapel_id,
+                        totalMateri: data.mapel_id.toString(),
                       );
                     },
                     itemCount: mapel.length,
@@ -236,20 +242,20 @@ class MyScrollableWidget extends StatelessWidget {
                               ],
                             ),
                             FutureBuilder<List<Task>>(
-                                future: ApiService().getTaskSiswa(id),
+                                future: ApiService().getTaskSiswa(idSiswa),
                                 builder: ((context,
                                     AsyncSnapshot<List<Task>> snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
                                     // While the future is still running
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   } else if (snapshot.hasError) {
                                     // If an error occurred while fetching the data
                                     return Text('Error: ${snapshot.error}');
                                   } else if (!snapshot.hasData ||
                                       snapshot.data!.isEmpty) {
                                     // If no data is available or the data list is empty
-                                    return Text('No data available');
+                                    return const Text('No data available');
                                   } else {
                                     // If data is available, you can build your UI using the data from the snapshot
                                     List<Task> task = snapshot.data!;
@@ -258,6 +264,7 @@ class MyScrollableWidget extends StatelessWidget {
                                       scrollDirection: Axis.vertical,
                                       itemBuilder: (context, index) {
                                         Task data = task[index];
+                                        // ignore: avoid_print
                                         print(data);
                                         return listTugas(
                                           idTugas: data.id.toString(),

@@ -2,15 +2,11 @@ import 'package:first_app/Beranda/beranda_page.dart';
 import 'package:first_app/Chatbot/chatbot_page.dart';
 import 'package:first_app/Chatbot/list_chatbot.dart';
 import 'package:first_app/Jadwal/jadwal_page.dart';
-import 'package:first_app/Kuis/quiz_fill.dart';
 import 'package:first_app/Kuis/quiz_list.dart';
-import 'package:first_app/Kuis/quiz_page.dart';
 import 'package:first_app/Kuis/quiz_ranking.dart';
-import 'package:first_app/Kuis/quiz_result.dart';
 import 'package:first_app/Kuis/testing.dart';
 import 'package:first_app/Mapel/detail_mapel.dart';
 import 'package:first_app/Mapel/detail_task.dart';
-import 'package:first_app/Siswa/detail_kelas.dart';
 import 'package:first_app/Siswa/siswa_list.dart';
 import 'package:first_app/auth/login_page.dart';
 import 'package:first_app/main/home_page.dart';
@@ -39,11 +35,15 @@ class MyApp extends StatelessWidget {
         '/siswa_list': (context) => const SiswaList(),
         '/detail_mapel': (context) => const DetailMapel(),
         '/detail_task': (context) => const DetailTask(),
-        '/chatbot': (context) => const ChatbotPage(),
+        // '/chatbot': (context) => const ChatbotPage(),
         '/list_chatbot': (context) => const ListChatbot(),
         // '/detail_kelas': (context) => const DetailKelas(idMapel: idMapel,),
-        '/quiz_page': (context) => const Quiz(),
-        '/quiz_fill': (context) => const QuizFill(),
+        // '/quiz_page': (context) => const Quiz(
+        //       idKuis: '',
+        //     ),
+        // '/quiz_fill': (context) => const QuizFill(
+        //       idKuis: '',
+        //     ),
         // '/quiz_result': (context) => QuizResult(),
         '/quiz_ranking': (context) => const QuizRanking(),
         '/testing': (context) => const Testing(),

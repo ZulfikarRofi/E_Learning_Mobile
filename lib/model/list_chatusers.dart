@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 class listChatUser {
-  int? id;
+  String? id;
+  String? idBot;
   String? name;
   String? bot_name;
   String? last_chat;
@@ -10,9 +11,10 @@ class listChatUser {
 
   listChatUser({
     this.id,
+    this.idBot,
     this.name,
     this.bot_name,
-    this.last_chat,
+    required this.last_chat,
     this.time,
     this.gap,
   });
@@ -20,6 +22,7 @@ class listChatUser {
   factory listChatUser.fromJson(Map<String, dynamic> map) {
     return listChatUser(
       id: map["id"],
+      idBot: map["idBot"],
       name: map["name"],
       bot_name: map["bot_name"],
       last_chat: map["last_chat"],
@@ -31,6 +34,7 @@ class listChatUser {
   Map<String, dynamic> toJson() {
     return {
       "id": id,
+      "idBot": idBot,
       "name": name,
       "bot_name": bot_name,
       "last_chat": last_chat,
@@ -41,7 +45,7 @@ class listChatUser {
 
   @override
   String toString() {
-    return 'listChatUser{id: $id, name: $name, bot_name: $bot_name, last_chat: $last_chat, time: $time, gap: $gap}';
+    return 'listChatUser{id: $id,idBot: $idBot, name: $name, bot_name: $bot_name, last_chat: $last_chat, time: $time, gap: $gap}';
   }
 }
 

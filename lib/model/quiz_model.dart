@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 class QuizModel {
-  int? id_kuis;
-  int? mapel_id;
-  int? kelas_id;
+  String? id_kuis;
+  String? mapel_id;
+  String? kelas_id;
   String? nama_mapel;
   String? nama_kelas;
   String? nama_kuis;

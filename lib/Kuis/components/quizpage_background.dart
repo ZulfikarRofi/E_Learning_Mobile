@@ -1,6 +1,12 @@
+import 'package:first_app/Kuis/quiz_fill.dart';
 import 'package:flutter/material.dart';
 
 class QuizpageBackground extends StatelessWidget {
+  final String? idKuis;
+
+  // ignore: avoid_types_as_parameter_names
+  const QuizpageBackground({key, required this.idKuis}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,7 +26,7 @@ class QuizpageBackground extends StatelessWidget {
                 width: 81,
                 height: 81,
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(50, 50, 50, 1),
+                    color: const Color.fromRGBO(50, 50, 50, 1),
                     borderRadius: BorderRadius.circular(40.5)),
               )),
           Positioned(
@@ -30,7 +36,7 @@ class QuizpageBackground extends StatelessWidget {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(50, 50, 50, 1),
+                    color: const Color.fromRGBO(50, 50, 50, 1),
                     borderRadius: BorderRadius.circular(60)),
               )),
           Positioned(
@@ -40,7 +46,7 @@ class QuizpageBackground extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(50, 50, 50, 1),
+                    color: const Color.fromRGBO(50, 50, 50, 1),
                     borderRadius: BorderRadius.circular(23)),
               )),
           Positioned(
@@ -50,7 +56,7 @@ class QuizpageBackground extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(50, 50, 50, 1),
+                    color: const Color.fromRGBO(50, 50, 50, 1),
                     borderRadius: BorderRadius.circular(20)),
               )),
           Positioned(
@@ -60,7 +66,7 @@ class QuizpageBackground extends StatelessWidget {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(50, 50, 50, 1),
+                    color: const Color.fromRGBO(50, 50, 50, 1),
                     borderRadius: BorderRadius.circular(60)),
               )),
           Positioned(
@@ -73,28 +79,34 @@ class QuizpageBackground extends StatelessWidget {
                     width: 226,
                     height: 226,
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(96, 92, 92, 1),
+                        color: const Color.fromRGBO(96, 92, 92, 1),
                         borderRadius: BorderRadius.circular(113)),
                   ),
                   Container(
                     width: 175,
                     height: 175,
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(143, 137, 137, 1),
+                        color: const Color.fromRGBO(143, 137, 137, 1),
                         borderRadius: BorderRadius.circular(88)),
                   ),
                   Container(
                     width: 145,
                     height: 145,
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 255, 255, 1),
+                        color: const Color.fromRGBO(255, 255, 255, 1),
                         borderRadius: BorderRadius.circular(75)),
                     child: TextButton(
                       style: const ButtonStyle(
                           overlayColor:
                               MaterialStatePropertyAll(Colors.transparent)),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/quiz_fill');
+                        // Navigator.pushNamed(context, '/quiz_fill');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QuizFill(idKuis: idKuis!),
+                          ),
+                        );
                       },
                       child: const Text(
                           style: TextStyle(

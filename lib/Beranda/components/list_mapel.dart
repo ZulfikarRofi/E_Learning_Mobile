@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class ListMapel extends StatelessWidget {
-  ValueNotifier<double> valueNotifier = ValueNotifier(00.0);
+  double progress;
   final String? idMapel, namaMapel, namaGuru, totalMateri;
   ListMapel({
     Key,
@@ -12,6 +12,7 @@ class ListMapel extends StatelessWidget {
     this.namaMapel,
     this.namaGuru,
     this.totalMateri,
+    required this.progress,
   }) : super(key: key);
 
   @override
@@ -33,7 +34,7 @@ class ListMapel extends StatelessWidget {
         ),
         child: SizedBox(
           width: 250,
-          height: 250,
+          height: 238,
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(7),
@@ -130,7 +131,7 @@ class ListMapel extends StatelessWidget {
                             Colors.lightGreen,
                             Colors.lightBlue
                           ],
-                          valueNotifier: valueNotifier,
+                          valueNotifier: ValueNotifier(progress),
                           mergeMode: true,
                           onGetText: (double value) {
                             return Text(
@@ -162,10 +163,10 @@ class ListMapel extends StatelessWidget {
                               scale: 4.0,
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: 100.0,
                             child: Text(
-                                maxLines: 2,
+                                maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w400,
@@ -196,7 +197,7 @@ class ListMapel extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 25.0,
+                  height: 20.0,
                 ),
                 SizedBox(
                   width: 300,

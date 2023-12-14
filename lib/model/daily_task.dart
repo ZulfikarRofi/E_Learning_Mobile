@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 class Dailytask {
-  int? id;
-  int? mapel_id;
-  int? kelas_id;
-  int? guru_id;
+  String? id;
+  String? mapel_id;
+  String? kelas_id;
+  String? guru_id;
   String? nama_guru;
   String? jam_pelajaran;
   String? nama_mapel;
