@@ -1,10 +1,10 @@
 import 'package:first_app/Beranda/beranda_page.dart';
-import 'package:first_app/Chatbot/chatbot_page.dart';
 import 'package:first_app/Chatbot/list_chatbot.dart';
 import 'package:first_app/Jadwal/jadwal_page.dart';
+import 'package:first_app/Kuis/kuis_trial.dart';
 import 'package:first_app/Kuis/quiz_list.dart';
-import 'package:first_app/Kuis/quiz_ranking.dart';
 import 'package:first_app/Kuis/testing.dart';
+import 'package:first_app/Kuis/trial_initial.dart';
 import 'package:first_app/Mapel/detail_mapel.dart';
 import 'package:first_app/Mapel/detail_task.dart';
 import 'package:first_app/Siswa/siswa_list.dart';
@@ -37,6 +37,8 @@ class MyApp extends StatelessWidget {
         '/detail_task': (context) => const DetailTask(),
         // '/chatbot': (context) => const ChatbotPage(),
         '/list_chatbot': (context) => const ListChatbot(),
+        '/initial_trial': (context) => const QuizApp(),
+        '/trial_quiz': (context) => const QuizScreen(),
         // '/detail_kelas': (context) => const DetailKelas(idMapel: idMapel,),
         // '/quiz_page': (context) => const Quiz(
         //       idKuis: '',
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
         //       idKuis: '',
         //     ),
         // '/quiz_result': (context) => QuizResult(),
-        '/quiz_ranking': (context) => const QuizRanking(),
+        // '/quiz_ranking': (context) => const QuizRanking(),
         '/testing': (context) => const Testing(),
       },
       initialRoute: 'LoginPage',

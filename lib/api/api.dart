@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:first_app/data/question_example.dart';
+import 'package:first_app/model/bot_options.dart';
 import 'package:first_app/model/daily_task.dart';
+import 'package:first_app/model/get_chats.dart';
 import 'package:first_app/model/list_chatusers.dart';
 import 'package:first_app/model/mata_pelajaran.dart';
 import 'package:first_app/model/materi_mapel.dart';
 import 'package:first_app/model/quiz_model.dart';
+import 'package:first_app/model/ranking.dart';
 import 'package:first_app/model/tugas_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -50,18 +53,17 @@ class ApiService {
         return 'failed';
       }
     } catch (e) {
-      print(e);
       return 'failed';
     }
   }
 
   getWhere(apiUrl, String id) async {
-    var fullUrl = baseUrl + apiUrl + "/" + id;
+    var fullUrl = "${baseUrl + apiUrl}/$id";
     return await http.get(Uri.parse(fullUrl), headers: _setHeaders());
   }
 
   Future<String> getWhereData(apiUrl, String id) async {
-    var fullUrl = baseUrl + apiUrl + "/" + id;
+    var fullUrl = "${baseUrl + apiUrl}/$id";
     http.Response response =
         await http.get(Uri.parse(fullUrl), headers: _setHeaders());
     try {
@@ -71,7 +73,6 @@ class ApiService {
         return 'failed';
       }
     } catch (e) {
-      print(e);
       return 'failed';
     }
   }
@@ -175,6 +176,36 @@ class ApiService {
       );
     } else {
       return List<Quiz>.empty();
+    }
+  }
+
+  Future<List<Ranking>> quizRanking(id) async {
+    final response = await client.get(Uri.parse("$baseUrl/getDataRanking/$id"));
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      return rankingFromJson(json.encode(body['data']));
+    } else {
+      return List<Ranking>.empty();
+    }
+  }
+
+  Future<List<botOptions>> getBotOptions(id) async {
+    final response = await client.get(Uri.parse("$baseUrl/getOptionsBot/$id"));
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      return botOptionsFromJson(json.encode(body['data']));
+    } else {
+      return List<botOptions>.empty();
+    }
+  }
+
+  Future<List<getFillChats>> getChats() async {
+    final response = await client.get(Uri.parse("$baseUrl/getBot"));
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      return getFillChatsFromJson(json.encode(body['data']));
+    } else {
+      return List<getFillChats>.empty();
     }
   }
 }

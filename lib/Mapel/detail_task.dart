@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:first_app/api/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailTask extends StatefulWidget {
   final String? idTugas;
@@ -24,17 +26,26 @@ class _DetailTaskPage extends State<DetailTask> {
   }
 
   _postDataTask() async {
-    var data = {
-      'siswa_id': "",
-      'task_id': "",
-    };
+    EasyLoading.show(
+        status: 'Loading....', maskType: EasyLoadingMaskType.black);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var data = {'siswa_id': localStorage.getString("id")!, 'task_id': idTugas};
 
     var res = await ApiService().postData(data, '/createTask');
     var body = jsonDecode(res.body);
-    if (body['respons']) {
-      setState(() {
-        isPressed = !isPressed;
-      });
+    if (body['msg'] != '') {
+      isPressed = !isPressed;
+      EasyLoading.dismiss();
+
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(body['msg'])));
+    } else {
+      EasyLoading.dismiss();
+
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Terjadi kesalahan')));
     }
   }
 
@@ -152,9 +163,7 @@ class _DetailTaskPage extends State<DetailTask> {
                     namaMapel: namaMapel,
                     tanggalAkhir: tanggalAkhir,
                     togglePressed: () {
-                      setState(() {
-                        isPressed = !isPressed;
-                      });
+                      _postDataTask();
                     },
                   ),
                 ]),

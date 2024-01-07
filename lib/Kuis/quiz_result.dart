@@ -32,7 +32,7 @@ class _QuizResultPage extends State<QuizResult> {
                           width: 1.0)),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/quiz_page');
+                      Navigator.pushNamed(context, '/beranda');
                     },
                     child: const Icon(color: Colors.black, Icons.arrow_back),
                   )),
@@ -62,7 +62,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 81,
                         height: 81,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(40.5)),
                       )),
                   Positioned(
@@ -72,7 +72,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(60)),
                       )),
                   Positioned(
@@ -82,7 +82,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 46,
                         height: 46,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(23)),
                       )),
                   Positioned(
@@ -92,7 +92,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(20)),
                       )),
                   Positioned(
@@ -102,7 +102,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 124,
                         height: 119,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(60)),
                       )),
                   Positioned(
@@ -112,7 +112,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 61,
                         height: 64,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(60)),
                       )),
                   Positioned(
@@ -122,7 +122,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 54,
                         height: 51,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(60)),
                       )),
                   Positioned(
@@ -132,7 +132,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 190,
                         height: 190,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(95)),
                       )),
                   Positioned(
@@ -142,7 +142,7 @@ class _QuizResultPage extends State<QuizResult> {
                         width: 148,
                         height: 148,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
+                            color: const Color.fromRGBO(50, 50, 50, 1),
                             borderRadius: BorderRadius.circular(75)),
                       )),
                   Positioned(
@@ -155,21 +155,21 @@ class _QuizResultPage extends State<QuizResult> {
                             width: 226,
                             height: 226,
                             decoration: BoxDecoration(
-                                color: Color.fromRGBO(96, 92, 92, 1),
+                                color: const Color.fromRGBO(96, 92, 92, 1),
                                 borderRadius: BorderRadius.circular(113)),
                           ),
                           Container(
                             width: 175,
                             height: 175,
                             decoration: BoxDecoration(
-                                color: Color.fromRGBO(143, 137, 137, 1),
+                                color: const Color.fromRGBO(143, 137, 137, 1),
                                 borderRadius: BorderRadius.circular(88)),
                           ),
                           Container(
                             width: 145,
                             height: 145,
                             decoration: BoxDecoration(
-                                color: Color.fromRGBO(255, 255, 255, 1),
+                                color: const Color.fromRGBO(255, 255, 255, 1),
                                 borderRadius: BorderRadius.circular(75)),
                           ),
                           Column(
@@ -189,109 +189,107 @@ class _QuizResultPage extends State<QuizResult> {
                         ],
                       )),
                   Positioned(
-                      bottom: 200,
-                      right: 95,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                        width: 192,
-                        height: 155,
-                        decoration: BoxDecoration(
-                            color: Color.fromRGBO(50, 50, 50, 1),
-                            border: Border.all(color: Colors.white, width: 1.5),
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset(
-                                  'assets/images/clock.png',
-                                  scale: 0.7,
+                    bottom: 200,
+                    right: 95,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10),
+                      width: 192,
+                      height: 155,
+                      decoration: BoxDecoration(
+                          color: const Color.fromRGBO(50, 50, 50, 1),
+                          border: Border.all(color: Colors.white, width: 1.5),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/clock.png',
+                                scale: 0.7,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white),
+                                        '5.30'),
+                                    Text(
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white),
+                                        'Waktu Pengerjaan')
+                                  ],
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white),
-                                          '5.30'),
-                                      Text(
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white),
-                                          'Waktu Pengerjaan')
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  'assets/images/correct.png',
-                                  scale: 1.0,
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/correct.png',
+                                scale: 1.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.green),
+                                        '${widget.trueAnswers}'),
+                                    const Text(
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white),
+                                        'Jawaban Benar')
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.green),
-                                          '${widget.trueAnswers}'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white),
-                                          'Jawaban Benar')
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  'assets/images/cancel.png',
-                                  scale: 0.9,
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/cancel.png',
+                                scale: 0.9,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.red),
+                                        '${widget.falseAnswers}'),
+                                    const Text(
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white),
+                                        'Jawaban Salah')
+                                  ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.red),
-                                          '${widget.falseAnswers}'),
-                                      const Text(
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white),
-                                          'Jawaban Salah')
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

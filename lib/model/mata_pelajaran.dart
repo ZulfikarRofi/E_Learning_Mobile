@@ -11,6 +11,7 @@ class MataPelajaran {
   String? hari_pelajaran;
   String? jam_pelajaran;
   String progress;
+  String? total_materi;
 
   MataPelajaran({
     this.id,
@@ -22,6 +23,7 @@ class MataPelajaran {
     this.deskripsi,
     this.hari_pelajaran,
     this.jam_pelajaran,
+    this.total_materi,
     required this.progress,
   });
 
@@ -37,6 +39,8 @@ class MataPelajaran {
         hari_pelajaran: map["hari_pelajaran"],
         jam_pelajaran: map["jam_pelajaran"],
         progress: map["progress"]);
+    total_materi:
+    map["total_materi"];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,12 +55,13 @@ class MataPelajaran {
       "hari_pelajaran": hari_pelajaran,
       "jam_pelajaran": jam_pelajaran,
       "progress": progress,
+      "total_materi": total_materi,
     };
   }
 
   @override
   String toString() {
-    return 'MataPelajaran{id: $id, kelas_id: $kelas_id, guru_id: $guru_id, nama_guru: $nama_guru,nama_mapel: $nama_mapel, mapel_id: $mapel_id, deskripsi: $deskripsi, hari_pelajaran: $hari_pelajaran, jam_pelajaran: $jam_pelajaran, progress:$progress}';
+    return 'MataPelajaran{id: $id, kelas_id: $kelas_id, guru_id: $guru_id, nama_guru: $nama_guru,nama_mapel: $nama_mapel, mapel_id: $mapel_id, deskripsi: $deskripsi, hari_pelajaran: $hari_pelajaran, jam_pelajaran: $jam_pelajaran, progress:$progress, total_materi:$total_materi}';
   }
 }
 

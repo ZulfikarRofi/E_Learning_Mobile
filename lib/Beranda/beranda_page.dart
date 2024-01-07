@@ -103,9 +103,18 @@ class _BerandaPageState extends State<BerandaPage> {
                     },
                     itemBuilder: (BuildContext context) {
                       return <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'Item 1',
-                          child: Text('Item 1'),
+                          child: TextButton(
+                              onPressed: () {
+                                // Navigator.pushNamed(context, '/detail_kelas');
+                                Navigator.pushNamed(context, '/trial_quiz');
+                              },
+                              style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                              ),
+                              child: const Text('Jancok')),
                         ),
                         const PopupMenuItem<String>(
                           value: 'Item 2',
@@ -188,7 +197,7 @@ class MyScrollableWidget extends StatelessWidget {
                         namaMapel: data.nama_mapel,
                         progress: double.parse(data.progress),
                         namaGuru: data.nama_guru,
-                        totalMateri: data.mapel_id.toString(),
+                        totalMateri: data.total_materi.toString(),
                       );
                     },
                     itemCount: mapel.length,

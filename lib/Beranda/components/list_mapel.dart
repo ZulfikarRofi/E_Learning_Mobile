@@ -189,8 +189,7 @@ class ListMapel extends StatelessWidget {
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12,
                                   color: Colors.grey),
-                              // '2 Materi'
-                              idMapel!),
+                              "${idMapel!} materi"),
                         ],
                       ),
                     ],

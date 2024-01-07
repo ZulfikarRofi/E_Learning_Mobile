@@ -1,14 +1,27 @@
+import 'dart:convert';
+
+import 'package:first_app/api/api.dart';
+import 'package:first_app/model/ranking.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+// ignore: must_be_immutable
 class QuizRanking extends StatefulWidget {
-  const QuizRanking({Key? key}) : super(key: key);
+  String kuisId;
+  QuizRanking({
+    Key? key,
+    required this.kuisId,
+  }) : super(key: key);
 
   @override
-  _QuizRankingPage createState() => _QuizRankingPage();
+  _QuizRankingPage createState() => _QuizRankingPage(kuisId: kuisId);
 }
 
 class _QuizRankingPage extends State<QuizRanking> {
+  String kuisId;
+  String? nama, poin, idSiswa;
+  _QuizRankingPage({required this.kuisId});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +66,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                           width: 81,
                           height: 81,
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
+                              color: const Color.fromRGBO(50, 50, 50, 1),
                               borderRadius: BorderRadius.circular(40.5)),
                         )),
                     Positioned(
@@ -63,7 +76,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
+                              color: const Color.fromRGBO(50, 50, 50, 1),
                               borderRadius: BorderRadius.circular(60)),
                         )),
                     Positioned(
@@ -73,7 +86,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                           width: 46,
                           height: 46,
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
+                              color: const Color.fromRGBO(50, 50, 50, 1),
                               borderRadius: BorderRadius.circular(23)),
                         )),
                     Positioned(
@@ -83,7 +96,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
+                              color: const Color.fromRGBO(50, 50, 50, 1),
                               borderRadius: BorderRadius.circular(20)),
                         )),
                     Positioned(
@@ -93,7 +106,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(50, 50, 50, 1),
+                              color: const Color.fromRGBO(50, 50, 50, 1),
                               borderRadius: BorderRadius.circular(60)),
                         )),
                     //Ranking Position
@@ -141,31 +154,50 @@ class _QuizRankingPage extends State<QuizRanking> {
                             scale: 1.0,
                           ),
                         )),
-                    Positioned(
-                        top: 330,
-                        left: 140,
-                        child: Container(
-                            width: 100.0,
-                            child: const Column(
-                              children: [
-                                Text(
-                                  'Budi',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600),
-                                  textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  '70 pts',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w300),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ))),
+                    FutureBuilder(
+                      future:
+                          ApiService().getWhereData('/getHasilRank1', kuisId),
+                      builder: ((context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.done) {
+                          Map<String, dynamic> rank1 =
+                              json.decode(snapshot.data!);
+                          nama = rank1['data']['namaSiswa'];
+                          poin = rank1['data']['skor'];
+                          // print(rank1['data']);
+                          return Positioned(
+                              top: 330,
+                              left: 140,
+                              child: SizedBox(
+                                  width: 100.0,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        nama!,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        '${poin!}pts',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w300),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  )));
+                        } else {
+                          return Text('Error: ${snapshot.error}');
+                        }
+                      }),
+                    ),
                     //Crown
                     Positioned(
                         top: 160,
@@ -221,71 +253,101 @@ class _QuizRankingPage extends State<QuizRanking> {
                 ),
                 child: SingleChildScrollView(
                   child: Column(children: [
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
-                    // MyRankings(),
+                    FutureBuilder<List<Ranking>>(
+                      future: ApiService().quizRanking(kuisId),
+                      builder:
+                          (context, AsyncSnapshot<List<Ranking>> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          // While the future is still running
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          // If an error occurred while fetching the data
+                          return Text('Error: ${snapshot.error}');
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          // If no data is available or the data list is empty
+                          return const Padding(
+                              padding: EdgeInsets.only(top: 25.0),
+                              child: Text(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                      color: Color.fromRGBO(0, 50, 120, 1)),
+                                  'Data Belum Tersedia'));
+                        } else {
+                          // If data is available, you can build your UI using the data from the snapshot
+                          List<Ranking> ranking = snapshot.data!;
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              Ranking data = ranking[index];
+                              idSiswa = data.idSiswa;
+                              nama = data.namasiswa;
+                              poin = data.skor.toString();
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                width: 360,
+                                // height: 65,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 18),
+                                        '4.'),
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(8),
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Colors.lightBlue[200]),
+                                          child: Image.asset(
+                                              'assets/images/murid.png'),
+                                        )),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15),
+                                          nama!),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15),
+                                        '${poin}pts'),
+                                  ],
+                                ),
+                              );
+                            },
+                            itemCount: ranking.length,
+                          );
+                        }
+                      },
+                    ),
                   ]),
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class MyRankings extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      margin: EdgeInsets.symmetric(vertical: 10),
-      width: 360,
-      // height: 65,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(15)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-              '4.'),
-          Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.lightBlue[200]),
-                child: Image.asset('assets/images/murid.png'),
-              )),
-          const Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Text(
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
-                'Nicholas Gross'),
-          ),
-          const Spacer(),
-          const Text(
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
-              '400 pts'),
-        ],
       ),
     );
   }

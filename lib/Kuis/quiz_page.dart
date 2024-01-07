@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:first_app/Kuis/components/quizpage_background.dart';
+import 'package:first_app/Kuis/quiz_ranking.dart';
 import 'package:first_app/api/api.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,13 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizPage extends State<Quiz> {
-  late String idKuis, namaMapel, namaKuis, namaKelas, totalSoal, kuisId;
+  late String idKuis,
+      namaMapel,
+      namaKuis,
+      namaKelas,
+      totalSoal,
+      kuisId,
+      totalWaktu;
   _QuizPage({
     required this.idKuis,
   });
@@ -68,6 +75,7 @@ class _QuizPage extends State<Quiz> {
               namaMapel = dataKuis['data'][0]['nama_mapel'];
               namaKelas = dataKuis['data'][0]['nama_kelas'];
               totalSoal = dataKuis['data'][0]['total_soal'].toString();
+              totalWaktu = (dataKuis['data'][0]['total_soal'] * 0.5).toString();
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -135,11 +143,11 @@ class _QuizPage extends State<Quiz> {
                                         children: [
                                           Image.asset(
                                               'assets/images/hourglass.png'),
-                                          const Text(
-                                              style: TextStyle(
+                                          Text(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 14),
-                                              '10 Menit'),
+                                              "${totalWaktu} Menit"),
                                           const Text(
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w300,
@@ -261,7 +269,14 @@ class _QuizPage extends State<Quiz> {
                                   MaterialStateProperty.all(Colors.transparent),
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, '/quiz_ranking');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => QuizRanking(
+                                    kuisId: idKuis,
+                                  ),
+                                ),
+                              );
                             },
                             child: Container(
                               width: 259,

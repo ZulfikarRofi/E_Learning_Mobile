@@ -5,7 +5,6 @@ import 'package:first_app/api/api.dart';
 import 'package:first_app/model/list_chatusers.dart';
 import 'package:first_app/model/user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListChatbot extends StatefulWidget {
@@ -85,13 +84,14 @@ class _ListChatbot extends State<ListChatbot> {
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         listChatUser data = chats[index];
+                        // print("$data.idBot ID BOT");
                         return MyChat(
                           idChat: data.id.toString(),
                           idBot: data.idBot.toString(),
                           name: data.name,
                           botName: data.bot_name,
                           time: data.time,
-                          lastChat: Html(data: data.last_chat).toString(),
+                          lastChat: data.last_chat,
                           gap: data.gap.toString(),
                         );
                       },
@@ -108,8 +108,7 @@ class _ListChatbot extends State<ListChatbot> {
 
 // ignore: must_be_immutable
 class MyChat extends StatelessWidget {
-  String? idChat, name, botName, time, gap;
-  var lastChat = """""";
+  String? idChat, name, botName, time, gap, lastChat;
   String idBot;
   MyChat(
       {Key,
@@ -169,14 +168,14 @@ class MyChat extends StatelessWidget {
                                 fontSize: 15,
                                 color: Colors.black),
                             botName!),
-                        const Text(
+                        Text(
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w300,
                                 fontSize: 14,
                                 color: Color.fromRGBO(0, 0, 0, 1)),
-                            "")
+                            lastChat!)
                       ],
                     ),
                   ),

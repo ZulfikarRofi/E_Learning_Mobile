@@ -1,4 +1,3 @@
-import 'package:first_app/Kuis/quiz_fill.dart';
 import 'package:flutter/material.dart';
 
 class QuizpageBackground extends StatelessWidget {
@@ -100,13 +99,13 @@ class QuizpageBackground extends StatelessWidget {
                           overlayColor:
                               MaterialStatePropertyAll(Colors.transparent)),
                       onPressed: () {
-                        // Navigator.pushNamed(context, '/quiz_fill');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => QuizFill(idKuis: idKuis!),
-                          ),
-                        );
+                        Navigator.pushNamed(context, '/trial_quiz');
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => QuizFill(idKuis: idKuis!),
+                        //   ),
+                        // );
                       },
                       child: const Text(
                           style: TextStyle(
