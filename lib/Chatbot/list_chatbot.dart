@@ -84,7 +84,7 @@ class _ListChatbot extends State<ListChatbot> {
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         listChatUser data = chats[index];
-                        // print("$data.idBot ID BOT");
+                        print("$data ini data bot");
                         return MyChat(
                           idChat: data.id.toString(),
                           idBot: data.idBot.toString(),
@@ -151,9 +151,9 @@ class MyChat extends StatelessWidget {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 70, 5, 1),
+                        color: Color.fromARGB(255, 196, 208, 255),
                         borderRadius: BorderRadius.circular(25)),
-                    child: Image.asset('assets/images/murid.png')),
+                    child: Image.asset('assets/images/chatbot.png')),
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   width: 200.0,

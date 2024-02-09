@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       var dat = jsonDecode(sessUser.toString());
       User user = User.fromJson(dat[0]);
 
-      localStorage.setString('id', user.id_user.toString());
+      localStorage.setString('id', user.siswa_id.toString());
       // localStorage.setString('id', emailCont.text);
 
       // ignore: use_build_context_synchronously
@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 50,
             ),
             TextButton(
-              onPressed: () {   
+              onPressed: () {
                 // Navigator.pushNamed(context, '/homepage');
                 _login();
               },

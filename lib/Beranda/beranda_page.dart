@@ -87,46 +87,13 @@ class _BerandaPageState extends State<BerandaPage> {
             SizedBox(
               width: 50,
               child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Colors.grey, // Set border color
-                          width: 1.0),
-                      borderRadius: BorderRadius.circular(25)),
-                  child:
-                      // Image.asset('assets/images/bell.png'),
-                      PopupMenuButton(
-                    icon: const Icon(Icons.notifications),
-                    onSelected: (value) {
-                      setState(() {
-                        _selectedItem = value;
-                      });
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
-                          value: 'Item 1',
-                          child: TextButton(
-                              onPressed: () {
-                                // Navigator.pushNamed(context, '/detail_kelas');
-                                Navigator.pushNamed(context, '/trial_quiz');
-                              },
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                              ),
-                              child: const Text('Jancok')),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'Item 2',
-                          child: Text('Item 2'),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'Item 3',
-                          child: Text('Item 3'),
-                        ),
-                      ];
-                    },
-                  )),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.grey, // Set border color
+                        width: 1.0),
+                    borderRadius: BorderRadius.circular(25)),
+                child: Image.asset('assets/images/bell.png'),
+              ),
             ),
           ],
         ),
@@ -135,6 +102,40 @@ class _BerandaPageState extends State<BerandaPage> {
     );
   }
 }
+
+// PopupMenuButton(
+//                     icon: const Icon(Icons.notifications),
+//                     onSelected: (value) {
+//                       setState(() {
+//                         _selectedItem = value;
+//                       });
+//                     },
+//                     itemBuilder: (BuildContext context) {
+//                       return <PopupMenuEntry<String>>[
+//                         PopupMenuItem<String>(
+//                           value: 'Item 1',
+//                           child: TextButton(
+//                               onPressed: () {
+//                                 // Navigator.pushNamed(context, '/detail_kelas');
+//                                 Navigator.pushNamed(context, '/trial_quiz');
+//                               },
+//                               style: ButtonStyle(
+//                                 overlayColor: MaterialStateProperty.all(
+//                                     Colors.transparent),
+//                               ),
+//                               child: const Text('Jancok')),
+//                         ),
+//                         const PopupMenuItem<String>(
+//                           value: 'Item 2',
+//                           child: Text('Item 2'),
+//                         ),
+//                         const PopupMenuItem<String>(
+//                           value: 'Item 3',
+//                           child: Text('Item 3'),
+//                         ),
+//                       ];
+//                     },
+//                   )
 
 class MyScrollableWidget extends StatelessWidget {
   final String? id, idSiswa;

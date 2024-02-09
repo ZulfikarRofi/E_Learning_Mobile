@@ -126,21 +126,6 @@ class _QuizRankingPage extends State<QuizRanking> {
                         right: 70,
                         child: Image.asset('assets/images/bronzemedal.png')),
                     Positioned(
-                        top: 290,
-                        left: 50,
-                        child: Container(
-                          width: 85,
-                          height: 85,
-                          decoration: BoxDecoration(
-                              color: Colors.lightBlue[200],
-                              borderRadius: BorderRadius.circular(60)),
-                        )),
-                    //Silver Medal
-                    Positioned(
-                        top: 350,
-                        left: 70,
-                        child: Image.asset('assets/images/silvermedal.png')),
-                    Positioned(
                         top: 210,
                         left: 132,
                         child: Container(
@@ -149,11 +134,53 @@ class _QuizRankingPage extends State<QuizRanking> {
                           decoration: BoxDecoration(
                               color: Colors.lightBlue[200],
                               borderRadius: BorderRadius.circular(60)),
-                          child: Image.asset(
+                          child: Image.asset(        
                             'assets/images/icon-male.png',
                             scale: 1.0,
                           ),
                         )),
+                    //Silver Medal
+                    FutureBuilder(
+                      future:
+                          ApiService().getWhereData('/getHasilRank2', kuisId),
+                      builder: ((context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.done) {
+                          Map<String, dynamic> rank1 =
+                              json.decode(snapshot.data!);
+                          print("${rank1} ini Data Ranking");
+                          nama = rank1['data'][0]['namaSiswa'];
+                          // poin = rank1['data']['skor'];
+                          // print(rank1['data']);
+                          return Column(
+                            children: [
+                              Positioned(
+                                top: 290,
+                                left: 50,
+                                child: Container(
+                                  width: 85,
+                                  height: 85,
+                                  decoration: BoxDecoration(
+                                      color: Colors.lightBlue[200],
+                                      borderRadius: BorderRadius.circular(60)),
+                                ),
+                              ),
+                              Positioned(
+                                  top: 350,
+                                  left: 70,
+                                  child: Image.asset(
+                                      'assets/images/silvermedal.png')),
+                            ],
+                          );
+                        } else {
+                          return Text('Error: ${snapshot.error}');
+                        }
+                      }),
+                    ),
+
                     FutureBuilder(
                       future:
                           ApiService().getWhereData('/getHasilRank1', kuisId),
@@ -165,6 +192,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                             ConnectionState.done) {
                           Map<String, dynamic> rank1 =
                               json.decode(snapshot.data!);
+                          print("${rank1} ini Data Ranking 1");
                           nama = rank1['data']['namaSiswa'];
                           poin = rank1['data']['skor'];
                           // print(rank1['data']);
