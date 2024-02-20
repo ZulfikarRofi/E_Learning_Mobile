@@ -319,7 +319,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 10),
                                 margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                 width: 300,
                                 // height: 65,
                                 decoration: BoxDecoration(
@@ -333,7 +333,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 18),
-                                        '4.'),
+                                        index + 3),
                                     Padding(
                                         padding:
                                             const EdgeInsets.only(left: 10),
