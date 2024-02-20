@@ -279,7 +279,6 @@ class _QuizRankingPage extends State<QuizRanking> {
                   borderRadius: BorderRadius.all(Radius.elliptical(270, 200)),
                   color: Colors.white,
                 ),
-                child: SingleChildScrollView(
                   child: Column(children: [
                     FutureBuilder<List<Ranking>>(
                       future: ApiService().quizRanking(kuisId),
@@ -372,7 +371,6 @@ class _QuizRankingPage extends State<QuizRanking> {
                       },
                     ),
                   ]),
-                ),
               ),
             ),
           ],
