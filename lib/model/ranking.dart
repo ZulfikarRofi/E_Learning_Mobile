@@ -4,14 +4,14 @@ class Ranking {
   String? idSiswa;
   String? idKuis;
   String? idNilai;
-  String? namasiswa;
-  int? skor;
+  String? nama;
+  String? skor;
 
   Ranking({
     this.idSiswa,
     this.idKuis,
     this.idNilai,
-    this.namasiswa,
+    this.nama,
     this.skor,
   });
 
@@ -20,7 +20,7 @@ class Ranking {
       idSiswa: map["idSiswa"],
       idKuis: map["idKuis"],
       idNilai: map["idNilai"],
-      namasiswa: map["namasiswa"],
+      nama: map["nama"],
       skor: map["skor"],
     );
   }
@@ -30,14 +30,14 @@ class Ranking {
       "idSiswa": idSiswa,
       "idKuis": idKuis,
       "idNilai": idNilai,
-      "namasiswa": namasiswa,
+      "nama": nama,
       "skor": skor,
     };
   }
 
   @override
   String toString() {
-    return 'Ranking{idSiswa: $idSiswa, idKuis: $idKuis, idNilai: $idNilai, namasiswa: $namasiswa, skor: $skor}';
+    return 'Ranking{idSiswa: $idSiswa, idKuis: $idKuis, idNilai: $idNilai, nama: $nama, skor: $skor}';
   }
 }
 
