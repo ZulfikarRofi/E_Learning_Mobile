@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:first_app/api/api.dart';
 import 'package:first_app/model/ranking.dart';
 import 'package:flutter/material.dart';
@@ -57,15 +58,57 @@ class _QuizRankingPage extends State<QuizRanking> {
               color: const Color.fromRGBO(38, 37, 37, 1),
               child: Stack(
                 children: [
-                  // Your other widgets here...
-                  
+                  //Decoration widgets here...
+
                   //Bronze Medal
                   Positioned(
                     top: 350,
                     right: 70,
-                    child: Image.asset('assets/images/bronzemedal.png')),
-                    
-                  // Your other widgets here...
+                    child: Image.asset('assets/images/bronzemedal.png'),
+                  ),
+
+                  //Silver Medal
+                  FutureBuilder(
+                    future: ApiService().getWhereData('/getHasilRank2', kuisId),
+                    builder: ((context, snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        Map<String, dynamic> rank1 =
+                            json.decode(snapshot.data!);
+                        print("${rank1} ini Data Ranking");
+                        nama = rank1['data'][0]['namaSiswa'];
+                        return Positioned(
+                          top: 290,
+                          left: 50,
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 85,
+                                height: 85,
+                                decoration: BoxDecoration(
+                                  color: Colors.lightBlue[200],
+                                  borderRadius: BorderRadius.circular(60),
+                                ),
+                              ),
+                              Positioned(
+                                top: 350,
+                                left: 70,
+                                child: Image.asset(
+                                    'assets/images/silvermedal.png'),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Text('Error: ${snapshot.error}');
+                      }
+                    }),
+                  ),
+
+                  //Other positioned widgets...
                 ],
               ),
             ),
@@ -82,7 +125,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                 ),
                 child: SingleChildScrollView(
                   child: Column(children: [
-                    // Your other widgets here...
+                    // Other widgets here...
                   ]),
                 ),
               ),
