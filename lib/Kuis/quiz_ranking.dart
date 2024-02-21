@@ -279,98 +279,94 @@ class _QuizRankingPage extends State<QuizRanking> {
                   borderRadius: BorderRadius.all(Radius.elliptical(270, 200)),
                   color: Colors.white,
                 ),
-                  child: Column(children: [
-                    FutureBuilder<List<Ranking>>(
-                      future: ApiService().quizRanking(kuisId),
-                      builder:
-                          (context, AsyncSnapshot<List<Ranking>> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          // While the future is still running
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          // If an error occurred while fetching the data
-                          return Text('Error: ${snapshot.error}');
-                        } else if (!snapshot.hasData ||
-                            snapshot.data!.isEmpty) {
-                          // If no data is available or the data list is empty
-                          return const Padding(
-                              padding: EdgeInsets.only(top: 25.0),
-                              child: Text(
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18,
-                                      color: Color.fromRGBO(0, 50, 120, 1)),
-                                  'Data Belum Tersedia'));
-                        } else {
-                          // If data is available, you can build your UI using the data from the snapshot
-                          List<Ranking> ranking = snapshot.data!;
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              Ranking data = ranking[index];
-                              print('Ini Data =${data}');
-                              idSiswa = data.idSiswa;
-                              nama = data.nama;
-                              poin = data.skor.toString();
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 60),
-                                width: 300,
-                                // height: 65,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18),
-                                        '${index + 4}.'),
-                                    Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(8),
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              color: Colors.lightBlue[200]),
-                                          child: Image.asset(
-                                              'assets/images/murid.png'),
-                                        )),
-                                    Padding(
+                child: Column(children: [
+                  FutureBuilder<List<Ranking>>(
+                    future: ApiService().quizRanking(kuisId),
+                    builder: (context, AsyncSnapshot<List<Ranking>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // While the future is still running
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        // If an error occurred while fetching the data
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        // If no data is available or the data list is empty
+                        return const Padding(
+                            padding: EdgeInsets.only(top: 25.0),
+                            child: Text(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18,
+                                    color: Color.fromRGBO(0, 50, 120, 1)),
+                                'Data Belum Tersedia'));
+                      } else {
+                        // If data is available, you can build your UI using the data from the snapshot
+                        List<Ranking> ranking = snapshot.data!;
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            Ranking data = ranking[index];
+                            print('Ini Data =${data}');
+                            idSiswa = data.idSiswa;
+                            nama = data.nama;
+                            poin = data.skor.toString();
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 60),
+                              width: 300,
+                              // height: 65,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 18),
+                                      '${index + 4}.'),
+                                  Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15),
-                                          nama!),
-                                    ),
-                                    const Spacer(),
-                                    Text(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.lightBlue[200]),
+                                        child: Image.asset(
+                                            'assets/images/murid.png'),
+                                      )),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15),
-                                        '${poin}pts'),
-                                  ],
-                                ),
-                              );
-                            },
-                            itemCount: ranking.length,
-                          );
-                        }
-                      },
-                    ),
-                  ]),
+                                        nama!),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15),
+                                      '${poin}pts'),
+                                ],
+                              ),
+                            );
+                          },
+                          itemCount: ranking.length,
+                        );
+                      }
+                    },
+                  ),
+                ]),
               ),
             ),
           ],
