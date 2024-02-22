@@ -270,17 +270,17 @@ class _QuizRankingPage extends State<QuizRanking> {
                 )),
             Positioned(
               bottom: -120,
-              child: Container(
-                padding: const EdgeInsets.only(
-                    bottom: 30, top: 50, left: 20, right: 20),
-                width: (MediaQuery.of(context).size.width) + 150,
-                height: (MediaQuery.of(context).size.height) - 300,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.elliptical(270, 200)),
-                  color: Colors.white,
-                ),
-                child: Column(children: [
-                  FutureBuilder<List<Ranking>>(
+              child: Column(children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                      bottom: 50, top: 0.0, left: 20, right: 20),
+                  width: (MediaQuery.of(context).size.width) + 150,
+                  height: (MediaQuery.of(context).size.height) - 300,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.elliptical(270, 200)),
+                    color: Colors.white,
+                  ),
+                  child: FutureBuilder<List<Ranking>>(
                     future: ApiService().quizRanking(kuisId),
                     builder: (context, AsyncSnapshot<List<Ranking>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -292,7 +292,7 @@ class _QuizRankingPage extends State<QuizRanking> {
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         // If no data is available or the data list is empty
                         return const Padding(
-                            padding: EdgeInsets.only(top: 25.0),
+                            padding: EdgeInsets.only(top: 0.0),
                             child: Text(
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
@@ -366,8 +366,8 @@ class _QuizRankingPage extends State<QuizRanking> {
                       }
                     },
                   ),
-                ]),
-              ),
+                ),
+              ]),
             ),
           ],
         ),
