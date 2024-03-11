@@ -627,39 +627,32 @@ class _ChatbotPageState extends State<ChatbotPage> {
 }
 
 class MyOptionbot extends StatelessWidget {
-  String? idOptions, idBot, isiText, idAnswer;
-  final Function() togglePressed;
+  final String? idOptions, idBot, isiText, idAnswer;
+  final VoidCallback togglePressed;
 
-  MyOptionbot({
+  const MyOptionbot({
     Key? key,
     this.idBot,
     this.idOptions,
     this.isiText,
     this.idAnswer,
     required this.togglePressed,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            // Set the color based on the state of the button
-            if (states.contains(MaterialState.pressed)) {
-              return Colors.red; // Color when the button is pressed
-            }
-            return Colors.blue; // Default color
-          },
-        ),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.blue,
+        onPrimary: Colors.white,
       ),
       onPressed: togglePressed,
-      child: Flexible(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Text(
           isiText!,
           style: const TextStyle(
             fontWeight: FontWeight.w500,
-            color: Colors.white,
             fontSize: 14,
           ),
         ),
