@@ -322,6 +322,26 @@
 // }
 
 
+import 'dart:convert';
+
+import 'package:first_app/Kuis/components/quizpage_background.dart';
+import 'package:first_app/Kuis/quiz_ranking.dart';
+import 'package:first_app/api/api.dart';
+import 'package:flutter/material.dart';
+
+class Quiz extends StatefulWidget {
+  final String idKuis;
+  const Quiz({
+    Key? key,
+    required this.idKuis,
+  }) : super(key: key);
+
+  @override
+  _QuizPage createState() => _QuizPage(
+        idKuis: idKuis,
+      );
+}
+
 class _QuizPage extends State<Quiz> {
   late String idKuis,
       namaMapel,
@@ -643,7 +663,7 @@ class _QuizPage extends State<Quiz> {
                         ),
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
             );
