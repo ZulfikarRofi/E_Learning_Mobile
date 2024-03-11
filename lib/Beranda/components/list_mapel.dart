@@ -1,4 +1,5 @@
-import 'package:first_app/Siswa/detail_kelas.dart';
+// import 'package:first_app/Siswa/detail_kelas.dart';
+import 'package:first_app/Siswa/new_detailkelas.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
@@ -25,7 +26,7 @@ class ListMapel extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DetailKelas(idMapel: idMapel),
+              builder: (context) => NewDetailKelas(idMapel: idMapel),
             ),
           );
         },

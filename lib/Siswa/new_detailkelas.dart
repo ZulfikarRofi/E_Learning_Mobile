@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:first_app/Mapel/detail_mapel.dart';
 import 'package:first_app/api/api.dart';
 import 'package:first_app/model/materi_mapel.dart';
@@ -6,19 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class DetailKelas extends StatefulWidget {
+class NewDetailKelas extends StatefulWidget {
   final String? idMapel;
 
-  DetailKelas({required this.idMapel, Key? key}) : super(key: key);
+  NewDetailKelas({required this.idMapel, Key? key}) : super(key: key);
 
   @override
-  _DetailKelasState createState() => _DetailKelasState(id: idMapel);
+  _NewDetailKelasState createState() => _NewDetailKelasState(id: idMapel);
 }
 
-class _DetailKelasState extends State<DetailKelas> {
+class _NewDetailKelasState extends State<NewDetailKelas> {
   final String? id;
 
-  _DetailKelasState({required this.id});
+  _NewDetailKelasState({required this.id});
 
   String? namaMapel, deskripsi, namaGuru, namaKelas;
   double progress = 0.0;
@@ -81,7 +82,8 @@ class _DetailKelasState extends State<DetailKelas> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {
-              Map<String, dynamic> dataMapel = json.decode(snapshot.data as String);
+              Map<String, dynamic> dataMapel =
+                  json.decode(snapshot.data as String);
               progress = double.parse(dataMapel['data']['progress']);
               namaMapel = dataMapel['data']['nama_mapel'];
               deskripsi = dataMapel['data']['deskripsi'];
@@ -106,7 +108,8 @@ class _DetailKelasState extends State<DetailKelas> {
                         width: 240,
                         child: Text(
                           namaMapel!,
-                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 20),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -138,7 +141,8 @@ class _DetailKelasState extends State<DetailKelas> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 20.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -169,7 +173,8 @@ class _DetailKelasState extends State<DetailKelas> {
                                   width: 200,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         namaGuru!,
@@ -253,7 +258,8 @@ class _DetailKelasState extends State<DetailKelas> {
                               fontSize: 18,
                               activeBgColor: [Colors.white],
                               activeFgColor: Colors.black,
-                              inactiveBgColor: Color.fromARGB(255, 234, 234, 234),
+                              inactiveBgColor:
+                                  Color.fromARGB(255, 234, 234, 234),
                               inactiveFgColor: Colors.grey,
                               initialLabelIndex: 0,
                               totalSwitches: 2,
@@ -340,7 +346,12 @@ class _DetailKelasState extends State<DetailKelas> {
 class MyMateri extends StatelessWidget {
   final String? idModul, namaModul, tanggalRegis, jamRegis;
 
-  const MyMateri({Key? key, this.idModul, this.namaModul, this.tanggalRegis, this.jamRegis})
+  const MyMateri(
+      {Key? key,
+      this.idModul,
+      this.namaModul,
+      this.tanggalRegis,
+      this.jamRegis})
       : super(key: key);
 
   @override
@@ -412,12 +423,18 @@ class MyMateri extends StatelessWidget {
                       Flexible(
                         child: Text(
                           namaModul!,
-                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Colors.black),
                         ),
                       ),
                       Text(
                         '$tanggalRegis pukul $jamRegis',
-                        style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13, color: Colors.grey),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 13,
+                            color: Colors.grey),
                       ),
                     ],
                   ),
