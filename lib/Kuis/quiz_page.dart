@@ -321,7 +321,6 @@
 //   }
 // }
 
-
 import 'dart:convert';
 
 import 'package:first_app/Kuis/components/quizpage_background.dart';
@@ -362,7 +361,8 @@ class _QuizPage extends State<Quiz> {
 
   Future<void> getDataKuis() async {
     try {
-      final response = await ApiService().getWhereData('/getDetailKuis', idKuis);
+      final response =
+          await ApiService().getWhereData('/getDetailKuis', idKuis);
       final Map<String, dynamic> dataKuis = json.decode(response);
       kuisId = dataKuis['data'][0]['id_kuis'].toString();
       namaKuis = dataKuis['data'][0]['nama_kuis'];
@@ -460,7 +460,8 @@ class _QuizPage extends State<Quiz> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 30, right: 30, left: 30),
+                              padding: const EdgeInsets.only(
+                                  top: 30, right: 30, left: 30),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -487,7 +488,8 @@ class _QuizPage extends State<Quiz> {
                                   const Spacer(),
                                   Column(
                                     children: [
-                                      Image.asset('assets/images/hourglass.png'),
+                                      Image.asset(
+                                          'assets/images/hourglass.png'),
                                       Text(
                                         "$totalWaktu Menit",
                                         style: const TextStyle(
@@ -506,16 +508,16 @@ class _QuizPage extends State<Quiz> {
                                   ),
                                   const Spacer(),
                                   Column(
-                                    children: const [
+                                    children: [
                                       Image.asset('assets/images/clock.png'),
-                                      Text(
+                                      const Text(
                                         '07.00 - 15.00',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14,
                                         ),
                                       ),
-                                      Text(
+                                      const Text(
                                         'Jam Pengerjaan',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -533,7 +535,8 @@ class _QuizPage extends State<Quiz> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 50),
                     child: Wrap(
                       direction: Axis.horizontal,
                       spacing: 5.0,
@@ -544,7 +547,8 @@ class _QuizPage extends State<Quiz> {
                             Navigator.pushNamed(context, '/jadwal_page');
                           },
                           style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                           ),
                           child: Container(
                             width: 114,
@@ -583,7 +587,8 @@ class _QuizPage extends State<Quiz> {
                             Navigator.pushNamed(context, '/quiz_list');
                           },
                           style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                           ),
                           child: Container(
                             width: 114,
@@ -622,12 +627,14 @@ class _QuizPage extends State<Quiz> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => QuizRanking(kuisId: idKuis),
+                                builder: (context) =>
+                                    QuizRanking(kuisId: idKuis),
                               ),
                             );
                           },
                           style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                           ),
                           child: Container(
                             width: 259,
